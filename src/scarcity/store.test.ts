@@ -4,6 +4,7 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, it, onTestFinished } from "vite-plus/test";
 
 import * as schema from "../db/schema.ts";
+import { readRankingPage } from "../ranking/ranking.server.ts";
 import { addDays, collectionSchema, localDate, observationSchema } from "./model.ts";
 import type { Observation, RestaurantCapture } from "./model.ts";
 import { importCollection, readRanking } from "./store.ts";
@@ -181,6 +182,19 @@ it("retries imports without duplication, rejects changed evidence, and preserves
   importCollection(db, collectionSchema.parse(latest));
   importCollection(db, collection("older-imported-last", [full], "2026-09-30T21:30:00Z"));
   expect(readRanking(db)[0]).toMatchObject({ collectionId: "latest", score: null, missing: 7 });
+  const page = readRankingPage(db, evidence.url);
+  expect(page.restaurants[0].week.map((day) => day.status)).toEqual(Array(7).fill("missing"));
+  expect(page.detail).toMatchObject({
+    collection: { id: "latest" },
+    observations: [],
+    bands: [
+      { startDay: 1, score: null, missing: 7 },
+      { startDay: 8 },
+      { startDay: 15 },
+      { startDay: 22 },
+    ],
+  });
+  expect(readRankingPage(db).detail).toBeNull();
   expect(db.select().from(schema.restaurantSnapshots).all()).toHaveLength(3);
 });
 

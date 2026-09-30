@@ -15,6 +15,9 @@ Usage: vp run data <command> [argument]
        vp run data --help
 
 Commands:
+  collect <new-directory> --har <private.har> [--days 28] [--query <name>]
+                         Capture public search pages and SF venue details; no DB writes.
+  assemble <directory>   Build collection.json offline from an interrupted capture.
   migrate                Apply checked-in Drizzle migrations to the local SQLite DB.
   schema                 Print the collection JSON Schema derived from Zod.
   validate <file.json>   Validate evidence without opening or modifying the DB.
@@ -24,7 +27,11 @@ Commands:
 
 Workflow:
   1. vp run data migrate
-  2. Collect public Resy evidence using agent-browser; follow the schema command.
+  2. Capture a successful public search with agent-browser network har start/stop.
+     Keep the HAR private; it contains authorization material.
+     vp run data collect /tmp/resy-pilot --har /private/search.har --days 7 --query Rintaro
+     Omit --query for all accessible SF search pages. Default horizon: 28 days.
+     The output is <directory>/collection.json plus sanitized request receipts.
      Existing data/collections/*.json captures include procedures and limitations.
   3. vp run data validate data/collections/<capture>.json
   4. vp run data import data/collections/<capture>.json
@@ -42,6 +49,12 @@ Evidence and scoring:
   JSON Schema describes fields; validate also checks cross-field Zod invariants.
 
 Retries and history:
+  Collection requires a new directory; no overwrites or automatic request retries.
+  Requests are sequential, spaced by one second, bounded by 20s timeouts and a 60m
+  run budget. Stop on HTTP/schema errors. Retain partial receipts on interruption;
+  assemble can finalize them offline. Start a new directory to retry collection.
+  Import only finalized collection.json, not receipts. Empty slots stay unknown;
+  release/service/closure policies need evidence-based review before scoring them.
   Exact re-imports are no-ops. Changed evidence requires a new collection ID.
   Failed imports roll back completely. New snapshots preserve prior observations.
   A snapshot is not a forecast. Keep timestamps and collection limitations visible.
@@ -54,7 +67,12 @@ Machine-readable output without the Vite+ task banner:
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
-    options: { help: { type: "boolean", short: "h" } },
+    options: {
+      help: { type: "boolean", short: "h" },
+      har: { type: "string" },
+      days: { type: "string" },
+      query: { type: "string" },
+    },
   });
 
   const [command, argument, ...extra] = positionals;
@@ -69,7 +87,40 @@ async function main() {
     throw new Error("Too many arguments");
   }
 
+  if (
+    command !== "collect" &&
+    (values.har !== undefined || values.days !== undefined || values.query !== undefined)
+  ) {
+    throw new Error("--har, --days and --query apply only to collect");
+  }
+
   switch (command) {
+    case "collect": {
+      if (!argument || !values.har)
+        throw new Error(
+          "Usage: vp run data collect <new-directory> --har <private.har> [--days 28] [--query <name>]",
+        );
+
+      const days = z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(28)
+        .parse(values.days ?? "28");
+
+      const { collectSearch } = await import("./collect.ts");
+      await collectSearch(argument, values.har, days, values.query ?? "");
+      break;
+    }
+
+    case "assemble": {
+      if (!argument) throw new Error("Usage: vp run data assemble <directory>");
+      const { assembleSearch } = await import("./collect.ts");
+      const collection = await assembleSearch(argument);
+      console.log(`Assembled ${collection.restaurants.length} restaurants`);
+      break;
+    }
+
     case "schema": {
       if (argument) {
         throw new Error("Usage: vp run data schema");

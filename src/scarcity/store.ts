@@ -8,7 +8,7 @@ import { localDate, SCORE_VERSION } from "./model.ts";
 import type { Collection } from "./model.ts";
 import { scoreRestaurant } from "./score.ts";
 
-type ScarcityDatabase = BetterSQLite3Database<typeof schema>;
+export type ScarcityDatabase = BetterSQLite3Database<typeof schema>;
 
 /** Import one validated, immutable collection atomically. Exact retries are no-ops. */
 export function importCollection(db: ScarcityDatabase, collection: Collection) {
