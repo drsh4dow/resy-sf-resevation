@@ -31,6 +31,12 @@ const config = defineConfig({
     ignorePatterns: toolingIgnorePatterns,
   },
   lint: {
+    categories: {
+      correctness: "error",
+      suspicious: "error",
+      perf: "error",
+    },
+    plugins: ["unicorn", "typescript", "oxc", "react", "jsx-a11y", "import", "promise"],
     ignorePatterns: toolingIgnorePatterns,
     jsPlugins: [
       { name: "vite-plus", specifier: "vite-plus/oxlint-plugin" },
@@ -38,6 +44,10 @@ const config = defineConfig({
     ],
     rules: {
       "vite-plus/prefer-vite-plus-imports": "error",
+      "react/rules-of-hooks": "error",
+      // The automatic JSX runtime does not require a React import.
+      "react/react-in-jsx-scope": "off",
+      "typescript/no-misused-promises": "error",
       "oxc/no-accumulating-spread": "error",
       "anti-slop/no-array-filter-map": "error",
       "anti-slop/no-reduce-accumulator-copy": "error",
