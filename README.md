@@ -66,7 +66,7 @@ score = 100 × unavailable dinner dates / (available + unavailable dates)
 The fixed 0–100 scale does not change as the subset grows. Zero means an opening
 on every assessed date; 100 means none observed. Neither predicts future demand.
 
-## Process and limits
+## Process
 
 1. Capture successful public search requests in a browser, then replay all-day,
    party-of-two searches sequentially across the horizon.
@@ -77,15 +77,45 @@ on every assessed date; 100 means none observed. Neither predicts future demand.
 4. Import immutable collections into SQLite and compute scores. Always use a
    restaurant's latest collection, never an older, more complete score.
 
-**Search completeness is unproven.** Pagination sometimes omits venues; omission
-never means booked. Reviewed negatives describe public search inventory, not
-certified sellouts. Published schedules may miss private closures, and unstated
-release timezones are interpreted as SF local time. Earlier HTTP failures stay
-in history. Policy reviews reuse observations, not independent samples.
-
 [Collection artifacts](data/collections/) preserve timestamps, source evidence,
 procedures, selection rules, and limitations. Credential-bearing HARs are not
 included. [CONTEXT.md](CONTEXT.md) defines the domain terms.
+
+## Caveats
+
+Resy's inventory-loading failures and inconsistent discovery results limited
+what we could verify within the take-home assignment's time window:
+
+- Inventory requests to `/4/find` and `/4/venue/calendar` failed with HTTP 500,
+  including browser `OPTIONS` preflights. Esme, Rintaro, and Flour + Water pages
+  loaded venue information but not reservation inventory; waits timed out.
+  Separate browser sessions reproduced the failures. Their cause remains
+  unresolved, so we recorded collection errors, not sold-out dates.
+- A successful browser capture allowed collection through
+  `POST /3/venuesearch/search` instead. This recovered the 28-day snapshot,
+  but search completeness is unproven. Cards display only some returned slots,
+  and time filters narrow the results. We used all-day response data rather
+  than counting visible buttons; reviewed negatives are not certified sellouts.
+- Pagination totals did not always reconcile. On October 1, all 17 pages
+  returned 332 unique listings against 334 advertised. Known venues also went
+  missing from individual dates or name searches. Those omissions remain
+  missing or unknown, never unavailable.
+- Eligibility required manual checks: SF discovery included nearby cities and
+  Tock inventory, while surviving Resy pages sometimes conflicted with official
+  booking links or release policies. Empty inventory alone could not distinguish
+  scarcity from another platform, events, non-service, or unreleased dates.
+
+Diagnosing failures, validating the search alternative, and checking policies
+used time that otherwise could have expanded coverage. We stopped after the
+28-day search capture and targeted policy review, leaving unresolved restaurants
+in **Needs review** rather than forcing a score. The
+[failure log](data/collections/2026-09-30-inventory-failures.json) and
+[search snapshot](data/collections/2026-09-30-search-snapshot.json) retain the
+observations and pagination counts.
+
+Published schedules may miss private closures, and unstated release timezones
+are interpreted as SF local time. Policy reviews reuse observations and are
+not independent samples of persistent scarcity.
 
 ## Consume or rebuild the data
 
