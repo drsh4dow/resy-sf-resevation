@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "geography-review-2026-09-30-esin",
+  "startedAt": "2026-09-30T23:37:19Z",
+  "finishedAt": "2026-09-30T23:37:19Z",
+  "discoveryUrl": "https://resy.com/cities/san-francisco-ca",
+  "discoveryComplete": false,
+  "selection": "Resolve the city-list venue absent from all 28 dates of the broad search snapshot.",
+  "collector": "Parent browser geography verification",
+  "procedure": [
+    "Open the canonical Resy venue URL discovered in the official Top Rated city list and wait for the restaurant content to render.",
+    "Read the physical address. Exclude Danville from a physically-within-San-Francisco analysis regardless of the San Francisco URL namespace.",
+    "Do not infer availability from the venue's absence in broad search; this review assesses geography only."
+  ],
+  "limitations": [
+    "A listing in a San Francisco Resy city collection is not evidence of a San Francisco street address.",
+    "The broader discovery cross-check is a sample of official city lists, not an exhaustive directory."
+  ],
+  "restaurants": [
+    {
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/esin-restaurant-and-bar",
+      "name": "Esin Restaurant & Bar",
+      "address": "750 Camino Ramon, Danville, CA 94526",
+      "geography": "outside_san_francisco",
+      "eligibility": "excluded",
+      "reason": "The Resy venue page confirms a Danville physical address, outside San Francisco. Broad-search omission is not interpreted as scarcity.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/esin-restaurant-and-bar",
+          "observedAt": "2026-09-30T23:37:19Z",
+          "quote": "Esin Restaurant & Bar. 750 Camino Ramon. Danville, CA 94526."
+        }
+      ],
+      "observations": []
+    }
+  ]
+}

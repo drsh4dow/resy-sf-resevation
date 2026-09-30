@@ -1,0 +1,923 @@
+{
+  "schemaVersion": 1,
+  "id": "search-b761521a-dfb8-4c84-9231-1e467133ae74",
+  "startedAt": "2026-09-30T22:59:39.723Z",
+  "finishedAt": "2026-09-30T22:59:53.199Z",
+  "discoveryUrl": "https://resy.com/cities/san-francisco-ca/search",
+  "discoveryComplete": false,
+  "selection": "Search query \"Pasta Panino\"; a convenience pilot, not a citywide ranking.",
+  "collector": "Resy public search API, reconstructed from agent-browser HAR; search-collector-v1",
+  "procedure": [
+    "Replay the browser's public search POST with party_size=2, All Day, page size 20, availability=true (includes zero-slot venues), and Tock inventory included for explicit exclusion.",
+    "Observe tomorrow through day 7; collect pages sequentially with one second between requests and no automatic retries.",
+    "Deduplicate venue IDs; verify SF street addresses with GET /3/venue. Retain source text; count only public, non-event, non-pickup slots from 18:00 through 21:00 inclusive.",
+    "Keep empty or ambiguous inventory unknown. No automated interpretation of release policies, service calendars, or closures.",
+    "Search pagination reconciliation: [{\"day\":\"2026-10-01\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-02\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-03\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-04\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-05\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-06\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true},{\"day\":\"2026-10-07\",\"pages\":1,\"expectedPages\":1,\"uniqueVenues\":7,\"expectedVenues\":7,\"duplicateRows\":0,\"reconciled\":true}]",
+    "Save allowlisted, Zod-validated responses as immutable receipts. Headers, cookies and reservation tokens are omitted. Assemble receipts without network access; import the resulting collection separately.",
+    "Excluded external Tock search result: Emmy's Spaghetti Shack, San Francisco, CA; ID 38950; https://www.exploretock.com/emmys-spaghetti-shack-san-francisco/. Not a Resy venue page.",
+    "Excluded external Tock search result: Cafe Tiramisu, San Francisco, CA; ID 22484; https://www.exploretock.com/cafetiramisu/. Not a Resy venue page.",
+    "Excluded external Tock search result: Flour + Water Pasta Shop, San Francisco, CA; ID 10475; https://www.exploretock.com/flourandwater/. Not a Resy venue page.",
+    "Excluded external Tock search result: Palio, San Francisco, CA; ID 21649; https://www.exploretock.com/palio/. Not a Resy venue page."
+  ],
+  "limitations": [
+    "Search is not an independently verified census of every Resy SF listing, even when returned totals reconcile. Availability-ranked pages can move during collection.",
+    "Slot completeness is not guaranteed by an API contract. No-slot dates remain unknown until independently reviewed with release and service evidence.",
+    "Official closure, event-only and other-platform policies require human review where inventory does not establish regular dinner access. A positive slot does not prove restaurant popularity.",
+    "Prices are not inferred from cancellation fees or template payment flags.",
+    "Uncollected dates and missing venues remain missing, not unavailable. External Tock listings are retained in collection provenance, not assigned invented Resy venue URLs. Nearby-city Resy venues remain excluded restaurant records."
+  ],
+  "restaurants": [
+    {
+      "name": "Pasta Panino",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/pasta-panino",
+      "address": "4150 18th St, San Francisco, CA, 94114",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Verified SF street address and public regular dinner inventory in this collection.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://api.resy.com/3/venuesearch/search",
+          "observedAt": "2026-09-30T22:59:41.646Z",
+          "quote": "Search venue ID 95055; locality=San Francisco; region=CA; is_tock_inventory=false."
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/pasta-panino",
+          "observedAt": "2026-09-30T22:59:42.905Z",
+          "quote": "Venue ID 95055; address: 4150 18th St, San Francisco, CA, 94114; country=US; is_active=1."
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/pasta-panino",
+          "observedAt": "2026-09-30T22:59:42.905Z",
+          "quote": "Fresh Pastas, Panini Sandwiches on Daily Baked Bread, Vegetarian Choices, All Sauces and Dressings made in House. Available for Take Out and Delivery.\n12 Noon to 9 pm Everyday"
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:59:41.646Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:41.646Z",
+              "quote": "All-day search for 2026-10-01, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-01 12:00:00 Dining Room; 2026-10-01 12:15:00 Dining Room; 2026-10-01 12:30:00 Dining Room; 2026-10-01 12:45:00 Dining Room; 2026-10-01 13:00:00 Dining Room; 2026-10-01 13:15:00 Dining Room; 2026-10-01 13:30:00 Dining Room; 2026-10-01 13:45:00 Dining Room; 2026-10-01 14:00:00 Dining Room; 2026-10-01 14:15:00 Dining Room; 2026-10-01 14:30:00 Dining Room; 2026-10-01 14:45:00 Dining Room; 2026-10-01 15:00:00 Dining Room; 2026-10-01 15:15:00 Dining Room; 2026-10-01 15:30:00 Dining Room; 2026-10-01 15:45:00 Dining Room; 2026-10-01 16:00:00 Dining Room; 2026-10-01 16:15:00 Dining Room; 2026-10-01 16:30:00 Dining Room; 2026-10-01 16:45:00 Dining Room; 2026-10-01 17:00:00 Dining Room; 2026-10-01 17:15:00 Dining Room; 2026-10-01 17:30:00 Dining Room; 2026-10-01 17:45:00 Dining Room; 2026-10-01 18:00:00 Dining Room; 2026-10-01 18:15:00 Dining Room; 2026-10-01 18:30:00 Dining Room; 2026-10-01 18:45:00 Dining Room; 2026-10-01 19:00:00 Dining Room; 2026-10-01 19:15:00 Dining Room; 2026-10-01 19:30:00 Dining Room; 2026-10-01 19:45:00 Dining Room; 2026-10-01 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-02",
+          "observedAt": "2026-09-30T22:59:45.642Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:45.642Z",
+              "quote": "All-day search for 2026-10-02, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-02 12:00:00 Dining Room; 2026-10-02 12:15:00 Dining Room; 2026-10-02 12:30:00 Dining Room; 2026-10-02 12:45:00 Dining Room; 2026-10-02 13:00:00 Dining Room; 2026-10-02 13:15:00 Dining Room; 2026-10-02 13:30:00 Dining Room; 2026-10-02 13:45:00 Dining Room; 2026-10-02 14:00:00 Dining Room; 2026-10-02 14:15:00 Dining Room; 2026-10-02 14:30:00 Dining Room; 2026-10-02 14:45:00 Dining Room; 2026-10-02 15:00:00 Dining Room; 2026-10-02 15:15:00 Dining Room; 2026-10-02 15:30:00 Dining Room; 2026-10-02 15:45:00 Dining Room; 2026-10-02 16:00:00 Dining Room; 2026-10-02 16:15:00 Dining Room; 2026-10-02 16:30:00 Dining Room; 2026-10-02 16:45:00 Dining Room; 2026-10-02 17:00:00 Dining Room; 2026-10-02 17:15:00 Dining Room; 2026-10-02 17:30:00 Dining Room; 2026-10-02 17:45:00 Dining Room; 2026-10-02 18:00:00 Dining Room; 2026-10-02 18:15:00 Dining Room; 2026-10-02 18:30:00 Dining Room; 2026-10-02 18:45:00 Dining Room; 2026-10-02 19:00:00 Dining Room; 2026-10-02 19:15:00 Dining Room; 2026-10-02 19:30:00 Dining Room; 2026-10-02 19:45:00 Dining Room; 2026-10-02 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-03",
+          "observedAt": "2026-09-30T22:59:47.141Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:47.141Z",
+              "quote": "All-day search for 2026-10-03, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-03 12:00:00 Dining Room; 2026-10-03 12:15:00 Dining Room; 2026-10-03 12:30:00 Dining Room; 2026-10-03 12:45:00 Dining Room; 2026-10-03 13:00:00 Dining Room; 2026-10-03 13:15:00 Dining Room; 2026-10-03 13:30:00 Dining Room; 2026-10-03 13:45:00 Dining Room; 2026-10-03 14:00:00 Dining Room; 2026-10-03 14:15:00 Dining Room; 2026-10-03 14:30:00 Dining Room; 2026-10-03 14:45:00 Dining Room; 2026-10-03 15:00:00 Dining Room; 2026-10-03 15:15:00 Dining Room; 2026-10-03 15:30:00 Dining Room; 2026-10-03 15:45:00 Dining Room; 2026-10-03 16:00:00 Dining Room; 2026-10-03 16:15:00 Dining Room; 2026-10-03 16:30:00 Dining Room; 2026-10-03 16:45:00 Dining Room; 2026-10-03 17:00:00 Dining Room; 2026-10-03 17:15:00 Dining Room; 2026-10-03 17:30:00 Dining Room; 2026-10-03 17:45:00 Dining Room; 2026-10-03 18:00:00 Dining Room; 2026-10-03 18:15:00 Dining Room; 2026-10-03 18:30:00 Dining Room; 2026-10-03 18:45:00 Dining Room; 2026-10-03 19:00:00 Dining Room; 2026-10-03 19:15:00 Dining Room; 2026-10-03 19:30:00 Dining Room; 2026-10-03 19:45:00 Dining Room; 2026-10-03 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-04",
+          "observedAt": "2026-09-30T22:59:48.630Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:48.630Z",
+              "quote": "All-day search for 2026-10-04, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-04 12:00:00 Dining Room; 2026-10-04 12:15:00 Dining Room; 2026-10-04 12:30:00 Dining Room; 2026-10-04 12:45:00 Dining Room; 2026-10-04 13:00:00 Dining Room; 2026-10-04 13:15:00 Dining Room; 2026-10-04 13:30:00 Dining Room; 2026-10-04 13:45:00 Dining Room; 2026-10-04 14:00:00 Dining Room; 2026-10-04 14:15:00 Dining Room; 2026-10-04 14:30:00 Dining Room; 2026-10-04 14:45:00 Dining Room; 2026-10-04 15:00:00 Dining Room; 2026-10-04 15:15:00 Dining Room; 2026-10-04 15:30:00 Dining Room; 2026-10-04 15:45:00 Dining Room; 2026-10-04 16:00:00 Dining Room; 2026-10-04 16:15:00 Dining Room; 2026-10-04 16:30:00 Dining Room; 2026-10-04 16:45:00 Dining Room; 2026-10-04 17:00:00 Dining Room; 2026-10-04 17:15:00 Dining Room; 2026-10-04 17:30:00 Dining Room; 2026-10-04 17:45:00 Dining Room; 2026-10-04 18:00:00 Dining Room; 2026-10-04 18:15:00 Dining Room; 2026-10-04 18:30:00 Dining Room; 2026-10-04 18:45:00 Dining Room; 2026-10-04 19:00:00 Dining Room; 2026-10-04 19:15:00 Dining Room; 2026-10-04 19:30:00 Dining Room; 2026-10-04 19:45:00 Dining Room; 2026-10-04 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-05",
+          "observedAt": "2026-09-30T22:59:50.175Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:50.175Z",
+              "quote": "All-day search for 2026-10-05, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-05 12:00:00 Dining Room; 2026-10-05 12:15:00 Dining Room; 2026-10-05 12:30:00 Dining Room; 2026-10-05 12:45:00 Dining Room; 2026-10-05 13:00:00 Dining Room; 2026-10-05 13:15:00 Dining Room; 2026-10-05 13:30:00 Dining Room; 2026-10-05 13:45:00 Dining Room; 2026-10-05 14:00:00 Dining Room; 2026-10-05 14:15:00 Dining Room; 2026-10-05 14:30:00 Dining Room; 2026-10-05 14:45:00 Dining Room; 2026-10-05 15:00:00 Dining Room; 2026-10-05 15:15:00 Dining Room; 2026-10-05 15:30:00 Dining Room; 2026-10-05 15:45:00 Dining Room; 2026-10-05 16:00:00 Dining Room; 2026-10-05 16:15:00 Dining Room; 2026-10-05 16:30:00 Dining Room; 2026-10-05 16:45:00 Dining Room; 2026-10-05 17:00:00 Dining Room; 2026-10-05 17:15:00 Dining Room; 2026-10-05 17:30:00 Dining Room; 2026-10-05 17:45:00 Dining Room; 2026-10-05 18:00:00 Dining Room; 2026-10-05 18:15:00 Dining Room; 2026-10-05 18:30:00 Dining Room; 2026-10-05 18:45:00 Dining Room; 2026-10-05 19:00:00 Dining Room; 2026-10-05 19:15:00 Dining Room; 2026-10-05 19:30:00 Dining Room; 2026-10-05 19:45:00 Dining Room; 2026-10-05 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-06",
+          "observedAt": "2026-09-30T22:59:51.691Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:51.691Z",
+              "quote": "All-day search for 2026-10-06, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-06 12:00:00 Dining Room; 2026-10-06 12:15:00 Dining Room; 2026-10-06 12:30:00 Dining Room; 2026-10-06 12:45:00 Dining Room; 2026-10-06 13:00:00 Dining Room; 2026-10-06 13:15:00 Dining Room; 2026-10-06 13:30:00 Dining Room; 2026-10-06 13:45:00 Dining Room; 2026-10-06 14:00:00 Dining Room; 2026-10-06 14:15:00 Dining Room; 2026-10-06 14:30:00 Dining Room; 2026-10-06 14:45:00 Dining Room; 2026-10-06 15:00:00 Dining Room; 2026-10-06 15:15:00 Dining Room; 2026-10-06 15:30:00 Dining Room; 2026-10-06 15:45:00 Dining Room; 2026-10-06 16:00:00 Dining Room; 2026-10-06 16:15:00 Dining Room; 2026-10-06 16:30:00 Dining Room; 2026-10-06 16:45:00 Dining Room; 2026-10-06 17:00:00 Dining Room; 2026-10-06 17:15:00 Dining Room; 2026-10-06 17:30:00 Dining Room; 2026-10-06 17:45:00 Dining Room; 2026-10-06 18:00:00 Dining Room; 2026-10-06 18:15:00 Dining Room; 2026-10-06 18:30:00 Dining Room; 2026-10-06 18:45:00 Dining Room; 2026-10-06 19:00:00 Dining Room; 2026-10-06 19:15:00 Dining Room; 2026-10-06 19:30:00 Dining Room; 2026-10-06 19:45:00 Dining Room; 2026-10-06 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-07",
+          "observedAt": "2026-09-30T22:59:53.199Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:53.199Z",
+              "quote": "All-day search for 2026-10-07, party_size=2; venue ID 95055, Pasta Panino. Returned 33 slots: 2026-10-07 12:00:00 Dining Room; 2026-10-07 12:15:00 Dining Room; 2026-10-07 12:30:00 Dining Room; 2026-10-07 12:45:00 Dining Room; 2026-10-07 13:00:00 Dining Room; 2026-10-07 13:15:00 Dining Room; 2026-10-07 13:30:00 Dining Room; 2026-10-07 13:45:00 Dining Room; 2026-10-07 14:00:00 Dining Room; 2026-10-07 14:15:00 Dining Room; 2026-10-07 14:30:00 Dining Room; 2026-10-07 14:45:00 Dining Room; 2026-10-07 15:00:00 Dining Room; 2026-10-07 15:15:00 Dining Room; 2026-10-07 15:30:00 Dining Room; 2026-10-07 15:45:00 Dining Room; 2026-10-07 16:00:00 Dining Room; 2026-10-07 16:15:00 Dining Room; 2026-10-07 16:30:00 Dining Room; 2026-10-07 16:45:00 Dining Room; 2026-10-07 17:00:00 Dining Room; 2026-10-07 17:15:00 Dining Room; 2026-10-07 17:30:00 Dining Room; 2026-10-07 17:45:00 Dining Room; 2026-10-07 18:00:00 Dining Room; 2026-10-07 18:15:00 Dining Room; 2026-10-07 18:30:00 Dining Room; 2026-10-07 18:45:00 Dining Room; 2026-10-07 19:00:00 Dining Room; 2026-10-07 19:15:00 Dining Room; 2026-10-07 19:30:00 Dining Room; 2026-10-07 19:45:00 Dining Room; 2026-10-07 20:00:00 Dining Room."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Dining Room",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Dining Room",
+              "price": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pasta Pelican Inc.",
+      "resyUrl": "https://resy.com/cities/alameda-ca/venues/pasta-pelican-inc",
+      "address": null,
+      "geography": "outside_san_francisco",
+      "eligibility": "excluded",
+      "reason": "Search reports Alameda, CA, CA, outside San Francisco.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://api.resy.com/3/venuesearch/search",
+          "observedAt": "2026-09-30T22:59:41.646Z",
+          "quote": "Search venue ID 91896; locality=Alameda, CA; region=CA; is_tock_inventory=false."
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Camino Alto",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/camino-alto",
+      "address": "1715 Union St., San Francisco, CA, 94123",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Verified SF street address and public regular dinner inventory in this collection.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://api.resy.com/3/venuesearch/search",
+          "observedAt": "2026-09-30T22:59:41.646Z",
+          "quote": "Search venue ID 56952; locality=San Francisco; region=CA; is_tock_inventory=false."
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/camino-alto",
+          "observedAt": "2026-09-30T22:59:44.156Z",
+          "quote": "Venue ID 56952; address: 1715 Union St., San Francisco, CA, 94123; country=US; is_active=1."
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/camino-alto",
+          "observedAt": "2026-09-30T22:59:44.156Z",
+          "quote": "We love spontaneity, so we'll always keep a slug of seats for first come, first served.\n\nNo seed, or processed oils.  Animals are pasture raised, vegetables are grown in rich dark soil.  Our unique and thoughtfully managed wines are so very good.  Let's eat!  \n\nAlso, open for daytime counter service Friday to Sunday, from 9:00 to 2:30 with St. Frank coffee to go with your blueberry masa waffle...  or market salad.  No reservation needed (or taken)!"
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/camino-alto",
+          "observedAt": "2026-09-30T22:59:44.156Z",
+          "quote": "A neighborhood restaurant using a wood burning oven to turn seasonal ingredients into beautifully simple dishes.  We start with just the good stuff, add some meticulously curated wines and a whole lotta village kindness.\nGreat meals start with great farmers, roasters, brewers and winemakers who understand Mother Earth and her seasons like few do.  Eat what you love.  Do it with thought, do it with the season, and whenever you can, do it with others."
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:59:41.646Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:41.646Z",
+              "quote": "All-day search for 2026-10-01, party_size=2; venue ID 56952, Camino Alto. Returned 12 slots: 2026-10-01 17:30:00 Suppertime!; 2026-10-01 17:45:00 Suppertime!; 2026-10-01 18:00:00 Suppertime!; 2026-10-01 18:15:00 Suppertime!; 2026-10-01 18:30:00 Suppertime!; 2026-10-01 19:15:00 Suppertime!; 2026-10-01 19:30:00 Suppertime!; 2026-10-01 19:45:00 Suppertime!; 2026-10-01 20:00:00 Suppertime!; 2026-10-01 20:15:00 Suppertime!; 2026-10-01 20:30:00 Suppertime!; 2026-10-01 20:45:00 Suppertime!."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "Suppertime!",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-02",
+          "observedAt": "2026-09-30T22:59:45.642Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:45.642Z",
+              "quote": "All-day search for 2026-10-02, party_size=2; venue ID 56952, Camino Alto. Returned 12 slots: 2026-10-02 17:30:00 Plan made!; 2026-10-02 17:45:00 Plan made!; 2026-10-02 18:00:00 Plan made!; 2026-10-02 18:15:00 Plan made!; 2026-10-02 19:45:00 Plan made!; 2026-10-02 20:00:00 Plan made!; 2026-10-02 20:15:00 Plan made!; 2026-10-02 20:30:00 Plan made!; 2026-10-02 20:45:00 Plan made!; 2026-10-02 21:00:00 Plan made!; 2026-10-02 21:15:00 Plan made!; 2026-10-02 21:30:00 Plan made!."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "21:00",
+              "type": "Plan made!",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-03",
+          "observedAt": "2026-09-30T22:59:47.141Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:47.141Z",
+              "quote": "All-day search for 2026-10-03, party_size=2; venue ID 56952, Camino Alto. Returned 13 slots: 2026-10-03 17:30:00 Plan made!; 2026-10-03 17:45:00 Plan made!; 2026-10-03 18:00:00 Plan made!; 2026-10-03 18:15:00 Plan made!; 2026-10-03 19:30:00 Plan made!; 2026-10-03 19:45:00 Plan made!; 2026-10-03 20:00:00 Plan made!; 2026-10-03 20:15:00 Plan made!; 2026-10-03 20:30:00 Plan made!; 2026-10-03 20:45:00 Plan made!; 2026-10-03 21:00:00 Plan made!; 2026-10-03 21:15:00 Plan made!; 2026-10-03 21:30:00 Plan made!."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "Plan made!",
+              "price": null
+            },
+            {
+              "time": "21:00",
+              "type": "Plan made!",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-04",
+          "observedAt": "2026-09-30T22:59:48.630Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:48.630Z",
+              "quote": "All-day search for 2026-10-04, party_size=2; venue ID 56952, Camino Alto. Returned 15 slots: 2026-10-04 17:30:00 SansCell Sunday; 2026-10-04 17:45:00 SansCell Sunday; 2026-10-04 18:00:00 SansCell Sunday; 2026-10-04 18:15:00 SansCell Sunday; 2026-10-04 18:30:00 SansCell Sunday; 2026-10-04 18:45:00 SansCell Sunday; 2026-10-04 19:00:00 SansCell Sunday; 2026-10-04 19:15:00 SansCell Sunday; 2026-10-04 19:30:00 SansCell Sunday; 2026-10-04 19:45:00 SansCell Sunday; 2026-10-04 20:00:00 SansCell Sunday; 2026-10-04 20:15:00 SansCell Sunday; 2026-10-04 20:30:00 SansCell Sunday; 2026-10-04 20:45:00 SansCell Sunday; 2026-10-04 21:00:00 SansCell Sunday."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "SansCell Sunday",
+              "price": null
+            },
+            {
+              "time": "21:00",
+              "type": "SansCell Sunday",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-05",
+          "observedAt": "2026-09-30T22:59:50.175Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:50.175Z",
+              "quote": "All-day search for 2026-10-05, party_size=2; venue ID 56952, Camino Alto. Returned 14 slots: 2026-10-05 17:30:00 Suppertime!; 2026-10-05 17:45:00 Suppertime!; 2026-10-05 18:00:00 Suppertime!; 2026-10-05 18:15:00 Suppertime!; 2026-10-05 18:30:00 Suppertime!; 2026-10-05 18:45:00 Suppertime!; 2026-10-05 19:00:00 Suppertime!; 2026-10-05 19:15:00 Suppertime!; 2026-10-05 19:30:00 Suppertime!; 2026-10-05 19:45:00 Suppertime!; 2026-10-05 20:00:00 Suppertime!; 2026-10-05 20:15:00 Suppertime!; 2026-10-05 20:30:00 Suppertime!; 2026-10-05 20:45:00 Suppertime!."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:45",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "Suppertime!",
+              "price": null
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-06",
+          "observedAt": "2026-09-30T22:59:51.691Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:51.691Z",
+              "quote": "All-day search for 2026-10-06, party_size=2; venue ID 56952, Camino Alto. Returned 0 slots: none. No verified qualifying regular dinner slot; release, service and completeness require review."
+            }
+          ],
+          "status": "unknown"
+        },
+        {
+          "diningDate": "2026-10-07",
+          "observedAt": "2026-09-30T22:59:53.199Z",
+          "evidence": [
+            {
+              "url": "https://api.resy.com/3/venuesearch/search",
+              "observedAt": "2026-09-30T22:59:53.199Z",
+              "quote": "All-day search for 2026-10-07, party_size=2; venue ID 56952, Camino Alto. Returned 11 slots: 2026-10-07 17:30:00 Suppertime!; 2026-10-07 17:45:00 Suppertime!; 2026-10-07 18:00:00 Suppertime!; 2026-10-07 18:15:00 Suppertime!; 2026-10-07 19:15:00 Suppertime!; 2026-10-07 19:30:00 Suppertime!; 2026-10-07 19:45:00 Suppertime!; 2026-10-07 20:00:00 Suppertime!; 2026-10-07 20:15:00 Suppertime!; 2026-10-07 20:30:00 Suppertime!; 2026-10-07 20:45:00 Suppertime!."
+            }
+          ],
+          "status": "available",
+          "slots": [
+            {
+              "time": "18:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "18:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "19:45",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:00",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:15",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:30",
+              "type": "Suppertime!",
+              "price": null
+            },
+            {
+              "time": "20:45",
+              "type": "Suppertime!",
+              "price": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
