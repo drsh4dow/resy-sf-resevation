@@ -17,9 +17,10 @@ vp run data report
 ```
 
 `DATABASE_URL` selects the SQLite file, defaulting to `dev.db`; configuration also
-reads `.env.local` and `.env`. Databases stay local. Checked-in collection JSON
-and Drizzle migrations reproduce the data. Exact re-imports are no-ops; changed
-evidence needs a new collection ID. Imports are atomic per artifact.
+reads `.env.local` and `.env`. The checked-in `dev.db` is the exercise snapshot
+for review. Collection JSON and Drizzle migrations reproduce it. Other databases
+and SQLite sidecars remain ignored. Exact re-imports are no-ops; changed evidence
+needs a new collection ID. Imports are atomic per artifact.
 
 ## Score
 

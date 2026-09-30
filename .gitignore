@@ -12,11 +12,12 @@ dist-ssr
 __unconfig*
 todos.json
 
-# Local SQLite databases and sidecar files
+# SQLite files; only the exercise snapshot is versioned for review
 *.db
 *.db-journal
 *.db-shm
 *.db-wal
+!/dev.db
 
 !.vscode/
 !.vscode/settings.json
