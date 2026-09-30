@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "id": "esme-2026-09-30T221721Z",
+  "startedAt": "2026-09-30T22:15:39Z",
+  "finishedAt": "2026-09-30T22:20:50.916Z",
+  "discoveryUrl": "https://resy.com/cities/san-francisco-ca",
+  "discoveryComplete": false,
+  "selection": "Esme was the first listed restaurant in the initial Climbing section with confirmed SF geography and regular dinner service. Depth-first pilot, not representative sampling.",
+  "collector": "agent-browser; resy-discovery observations with resy-listed-pilot official-policy corroboration",
+  "procedure": [
+    "Use an isolated session, load agent-browser skills get core, verify UTC and America/Los_Angeles clocks, and discover Esme through the SF city page.",
+    "Open the Resy venue URL with ?date=2026-10-01&seats=2, wait for Need to Know, then read and snapshot -i -u. Follow the linked official restaurant website.",
+    "Inspect representative October 8 availability and October 5 closure before processing October 1–28 in order.",
+    "For each date open https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=YYYY-MM-DD&seats=2. Wait until .ReservationButtonList exists or body text includes no online availability.",
+    "Read-only eval records new Date().toISOString(), URL date, first select value 2, selected-date labels or date-specific availability text, button.ReservationButton IDs and .ReservationButton__time/.ReservationButton__type. Filter visible starts to 18:00–21:00 inclusive with All Day selected.",
+    "Read messages from .ShiftInventory__availability-message,.ShiftInventory,.ReservationButtonList. Preserve no-availability messages as unknown because the two-person release policy was not established.",
+    "A second scout expanded the official Reservations and Hours accordions and verified aria-expanded=true. Its precise policy evidence below corroborates Monday closures; this capture combines that later policy evidence with the earlier 28-date observations.",
+    "On navigation/wait failure stop, leaving unexamined dates missing. No such failure occurred in this 28-date loop. Both scouts closed only their own sessions."
+  ],
+  "limitations": [
+    "Two-person booking-window/release policy unresolved. The official two-week window and $75 price apply only to groups of 7–12, not to this party of two.",
+    "Inventory wait checked message/list appearance, not a documented fully-settled application state; successful inventory HTTP responses were not independently recorded in the original loop.",
+    "Later sessions encountered inventory preflight HTTP 500 failures. This earlier capture is preserved as reported evidence, not evidence of current availability.",
+    "The next-availability message repeatedly named October 8 even when the queried date was later. It was not used as the earliest-available-date calculation.",
+    "No checkout was opened; restrictions or prices revealed only after slot selection remain unverified.",
+    "Metadata and closure evidence come from the second scout at precise timestamps; availability observations come from the first scout. This is not a simultaneous snapshot."
+  ],
+  "restaurants": [
+    {
+      "name": "Esme",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/esme-ca",
+      "address": "311 Divisadero St, San Francisco, CA 94117",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Official regular dinner service and Resy booking link; public Dining Room slots for two observed. Separate event inventory and walk-ins were not counted.",
+      "bookingPolicy": "Regular reservations through Resy; Monday closed, Tuesday–Sunday 17:00–21:00. Two-person release window unresolved. Large-party release and pricing policies do not apply.",
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-01&seats=2",
+          "observedAt": "2026-09-30T22:20:00.057Z",
+          "quote": "311 Divisadero St\n\nSan Francisco, CA 94117"
+        },
+        {
+          "url": "https://www.esmerestaurantsf.com/",
+          "observedAt": "2026-09-30T22:20:33.054Z",
+          "quote": "Book on RESY. We do not take reservations by email with the exception of private dining for groups of 11+."
+        },
+        {
+          "url": "https://www.esmerestaurantsf.com/",
+          "observedAt": "2026-09-30T22:20:50.916Z",
+          "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:17:21.104Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-01&seats=2",
+              "observedAt": "2026-09-30T22:17:21.104Z",
+              "quote": "At the moment, there's no online availability for Tomorrow. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-02",
+          "observedAt": "2026-09-30T22:17:22.612Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-02&seats=2",
+              "observedAt": "2026-09-30T22:17:22.612Z",
+              "quote": "At the moment, there's no online availability for Fri., Oct. 2. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-03",
+          "observedAt": "2026-09-30T22:17:24.363Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-03&seats=2",
+              "observedAt": "2026-09-30T22:17:24.363Z",
+              "quote": "At the moment, there's no online availability for Sat., Oct. 3. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-04",
+          "observedAt": "2026-09-30T22:17:25.802Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-04&seats=2",
+              "observedAt": "2026-09-30T22:17:25.802Z",
+              "quote": "At the moment, there's no online availability for Sun., Oct. 4. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-05",
+          "observedAt": "2026-09-30T22:17:27.572Z",
+          "status": "non_service",
+          "evidence": [
+            {
+              "url": "https://www.esmerestaurantsf.com/",
+              "observedAt": "2026-09-30T22:20:50.916Z",
+              "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-06",
+          "observedAt": "2026-09-30T22:17:29.856Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-06&seats=2",
+              "observedAt": "2026-09-30T22:17:29.856Z",
+              "quote": "At the moment, there's no online availability for Tue., Oct. 6. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-07",
+          "observedAt": "2026-09-30T22:17:31.589Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-07&seats=2",
+              "observedAt": "2026-09-30T22:17:31.589Z",
+              "quote": "At the moment, there's no online availability for Wed., Oct. 7. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-08",
+          "observedAt": "2026-09-30T22:17:33.346Z",
+          "status": "available",
+          "slots": [{ "time": "21:00", "type": "Dining Room", "price": null }],
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-08&seats=2",
+              "observedAt": "2026-09-30T22:17:33.346Z",
+              "quote": "9:00 PM\nDining Room\nNotify"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-09",
+          "observedAt": "2026-09-30T22:17:35.188Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-09&seats=2",
+              "observedAt": "2026-09-30T22:17:35.188Z",
+              "quote": "At the moment, there's no online availability for Fri., Oct. 9. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-10",
+          "observedAt": "2026-09-30T22:17:36.772Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-10&seats=2",
+              "observedAt": "2026-09-30T22:17:36.772Z",
+              "quote": "At the moment, there's no online availability for Sat., Oct. 10. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-11",
+          "observedAt": "2026-09-30T22:17:38.571Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-11&seats=2",
+              "observedAt": "2026-09-30T22:17:38.571Z",
+              "quote": "At the moment, there's no online availability for Sun., Oct. 11. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-12",
+          "observedAt": "2026-09-30T22:17:40.192Z",
+          "status": "non_service",
+          "evidence": [
+            {
+              "url": "https://www.esmerestaurantsf.com/",
+              "observedAt": "2026-09-30T22:20:50.916Z",
+              "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-13",
+          "observedAt": "2026-09-30T22:17:41.761Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-13&seats=2",
+              "observedAt": "2026-09-30T22:17:41.761Z",
+              "quote": "At the moment, there's no online availability for Tue., Oct. 13. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-14",
+          "observedAt": "2026-09-30T22:17:43.798Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-14&seats=2",
+              "observedAt": "2026-09-30T22:17:43.798Z",
+              "quote": "Sorry, we don't currently have any tables available for 2.\nUnfortunately, we can't accommodate that reservation. Please select another party size or date.\nNotify"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-15",
+          "observedAt": "2026-09-30T22:17:45.329Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-15&seats=2",
+              "observedAt": "2026-09-30T22:17:45.329Z",
+              "quote": "At the moment, there's no online availability for Thu., Oct. 15. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-16",
+          "observedAt": "2026-09-30T22:17:47.116Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-16&seats=2",
+              "observedAt": "2026-09-30T22:17:47.116Z",
+              "quote": "At the moment, there's no online availability for Fri., Oct. 16. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-17",
+          "observedAt": "2026-09-30T22:17:48.940Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-17&seats=2",
+              "observedAt": "2026-09-30T22:17:48.940Z",
+              "quote": "At the moment, there's no online availability for Sat., Oct. 17. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-18",
+          "observedAt": "2026-09-30T22:17:50.600Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-18&seats=2",
+              "observedAt": "2026-09-30T22:17:50.600Z",
+              "quote": "At the moment, there's no online availability for Sun., Oct. 18. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-19",
+          "observedAt": "2026-09-30T22:17:52.370Z",
+          "status": "non_service",
+          "evidence": [
+            {
+              "url": "https://www.esmerestaurantsf.com/",
+              "observedAt": "2026-09-30T22:20:50.916Z",
+              "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-20",
+          "observedAt": "2026-09-30T22:17:54.205Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-20&seats=2",
+              "observedAt": "2026-09-30T22:17:54.205Z",
+              "quote": "At the moment, there's no online availability for Tue., Oct. 20. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-21",
+          "observedAt": "2026-09-30T22:17:55.980Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-21&seats=2",
+              "observedAt": "2026-09-30T22:17:55.980Z",
+              "quote": "At the moment, there's no online availability for Wed., Oct. 21. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-22",
+          "observedAt": "2026-09-30T22:17:57.713Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-22&seats=2",
+              "observedAt": "2026-09-30T22:17:57.713Z",
+              "quote": "At the moment, there's no online availability for Thu., Oct. 22. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-23",
+          "observedAt": "2026-09-30T22:17:59.480Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-23&seats=2",
+              "observedAt": "2026-09-30T22:17:59.480Z",
+              "quote": "At the moment, there's no online availability for Fri., Oct. 23. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-24",
+          "observedAt": "2026-09-30T22:18:00.960Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-24&seats=2",
+              "observedAt": "2026-09-30T22:18:00.960Z",
+              "quote": "At the moment, there's no online availability for Sat., Oct. 24. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-25",
+          "observedAt": "2026-09-30T22:18:02.731Z",
+          "status": "unknown",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-25&seats=2",
+              "observedAt": "2026-09-30T22:18:02.731Z",
+              "quote": "At the moment, there's no online availability for Sun., Oct. 25. The next availability for 2 is Thu., Oct. 8."
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-26",
+          "observedAt": "2026-09-30T22:18:04.258Z",
+          "status": "non_service",
+          "evidence": [
+            {
+              "url": "https://www.esmerestaurantsf.com/",
+              "observedAt": "2026-09-30T22:20:50.916Z",
+              "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-27",
+          "observedAt": "2026-09-30T22:18:05.698Z",
+          "status": "available",
+          "slots": [{ "time": "21:00", "type": "Dining Room", "price": null }],
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-27&seats=2",
+              "observedAt": "2026-09-30T22:18:05.698Z",
+              "quote": "9:00 PM\nDining Room\nNotify"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-28",
+          "observedAt": "2026-09-30T22:18:08.123Z",
+          "status": "available",
+          "slots": [{ "time": "21:00", "type": "Dining Room", "price": null }],
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-28&seats=2",
+              "observedAt": "2026-09-30T22:18:08.123Z",
+              "quote": "9:00 PM\nDining Room\nNotify"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "id": "sf-discovery-2026-09-30T221600Z",
+  "startedAt": "2026-09-30T22:16:00.341Z",
+  "finishedAt": "2026-09-30T22:16:00.341Z",
+  "discoveryUrl": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+  "discoveryComplete": false,
+  "selection": "14 distinct venue links in DOM order from the initial Climbing, Top Rated, and New on Resy sections. Each section displayed five entries; Esme appeared twice. No See more controls were followed.",
+  "collector": "agent-browser; scout resy-discovery",
+  "procedure": [
+    "Load agent-browser skills get core; derive an isolated session with agent-browser session id --scope worktree --prefix resy-discovery.",
+    "Open https://resy.com/cities/san-francisco-ca and wait until a venue link exists without undefined in its URL.",
+    "Run snapshot -i -u, then read-only eval over a[href*=\"/venues/\"]. Extract innerText and href, excluding undefined and /events/ URLs. Strip query parameters, deduplicate, preserve DOM order.",
+    "Record UTC time and selected discovery sections; do not infer physical geography from city-page membership. Close only the owned session after the separate Esme pilot."
+  ],
+  "limitations": [
+    "Bounded discovery, not a census or representative sample. Other sections still contained loading placeholders.",
+    "No addresses were visible in these discovery rows. Geography and booking eligibility remain unassessed here.",
+    "Rich Table was not present in this bounded inventory; this does not establish absence from Resy."
+  ],
+  "restaurants": [
+    {
+      "name": "Esme",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/esme-ca",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Esme"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Izakaya Rintaro",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/izakaya-rintaro",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Izakaya Rintaro"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Flour + Water",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/flour-and-water",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Flour + Water"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Café Chez Panisse",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/chez-panisse-cafe",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Café Chez Panisse"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Restaurant Chez Panisse",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/chez-panisse",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Restaurant Chez Panisse"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Mr. Pollo",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/mr-pollo",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Mr. Pollo"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Heirloom Cafe SF",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/heirloom-cafe",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Heirloom Cafe SF"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Esin Restaurant & Bar",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/esin-restaurant-and-bar",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Esin Restaurant & Bar"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "KEN",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/ken",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "KEN"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Utzutzu",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/utzutzu",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Utzutzu"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Rose Pizzeria - SF",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/rose-pizzeria-sf",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Rose Pizzeria - SF"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "SAAM",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/saam-ca",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "SAAM"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "Left Door",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/left-door",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "Left Door"
+        }
+      ],
+      "observations": []
+    },
+    {
+      "name": "The Four Horsemen x Day Moon, Presented by Resy",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/the-four-horsemen-x-day-moon-bakery-presented-by-resy",
+      "address": null,
+      "geography": "unknown",
+      "eligibility": "unresolved",
+      "reason": "Discovery only; geography and regular dinner eligibility not yet assessed.",
+      "bookingPolicy": null,
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca?date=2026-09-30&seats=2",
+          "observedAt": "2026-09-30T22:16:00.341Z",
+          "quote": "The Four Horsemen x Day Moon, Presented by Resy"
+        }
+      ],
+      "observations": []
+    }
+  ]
+}

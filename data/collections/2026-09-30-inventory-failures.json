@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "id": "sf-inventory-failures-2026-09-30T222506Z",
+  "startedAt": "2026-09-30T22:18:47Z",
+  "finishedAt": "2026-09-30T22:25:06Z",
+  "discoveryUrl": "https://resy.com/cities/san-francisco-ca",
+  "discoveryComplete": false,
+  "selection": "Depth-first investigation of three restaurants from the initial discovery inventory. Esme was selected twice before discovery results reached the parent; subsequent scouts had explicit Rintaro and Flour + Water assignments. Parent audited one previously available Esme date.",
+  "collector": "agent-browser; resy-listed-pilot, resy-rintaro, resy-flour-water, and parent resy-audit-20260930",
+  "procedure": [
+    "Each scout loaded agent-browser skills get core, checked actual UTC/SF clocks, and derived its own session with agent-browser session id --scope worktree --prefix <assignment>.",
+    "Open each canonical Resy URL with ?date=2026-10-01&seats=2. Wait for the venue heading and inspect snapshot -i -u. Verify #party_size=2, #DropdownGroup__selector--date--selection=Tomorrow, and #time=All Day.",
+    "Wait for .ShiftInventory__availability-message or button.ReservationButton. Inspect agent-browser network requests when inventory does not render. OPTIONS requests to /4/find and /4/venue/calendar returned HTTP 500; corresponding inventory requests had no successful response status.",
+    "Esme scout used doctor --offline --quick once, verified the selected October 1 calendar label, and stopped inventory collection. Follow the Resy-linked official site, expand Reservations and Hours, and wait for aria-expanded=true before reading policy text.",
+    "Rintaro scout inspected network requests, errors, console, and read-only DOM/performance resource status once. Follow the Resy-linked official site and read #location for address, service hours, and the 28-day release policy. No inventory retry.",
+    "Flour + Water scout's inventory-specific wait timed out after 25 seconds. Inspect network requests --filter api.resy.com/4, errors, and console once. Follow the official homepage's FAQ and expand the reservation-policy heading to verify release text.",
+    "Parent audited Esme October 8 in a separate named session, checking the actual two-guest/date controls. The inventory wait timed out. doctor --offline --quick passed; network requests showed both inventory preflights returning 500. No retry or workaround.",
+    "Record collection_error, not unavailable, for failed dates. Leave unexamined dates omitted. Close only each owned session. Stop expansion after the shared inventory-loading failure was corroborated across venues and sessions."
+  ],
+  "limitations": [
+    "Venue metadata and official restaurant pages loaded, but inventory preflights failed. No scarcity inference is justified from these failures.",
+    "Esme has two failed date observations; Rintaro and Flour + Water each have one. Other dining dates in this collection were not queried.",
+    "Rintaro and Flour + Water publish 28-day release policies but do not explicitly state the release timezone. No unavailable status was inferred from the policies alone.",
+    "Published recurring hours do not establish holiday-specific exceptions.",
+    "No login, reservation, checkout, API replay, challenge bypass, or speculative retry. This is an incomplete convenience subset, not a citywide ranking."
+  ],
+  "restaurants": [
+    {
+      "name": "Esme",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/esme-ca",
+      "address": "311 Divisadero St, San Francisco, CA 94117",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Official regular dinner service and public Resy booking link; current inventory could not load.",
+      "bookingPolicy": "Regular reservations through Resy; Monday closed, Tuesday–Sunday 17:00–21:00. Two-person release window unresolved.",
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-01&seats=2",
+          "observedAt": "2026-09-30T22:20:00.057Z",
+          "quote": "311 Divisadero St\n\nSan Francisco, CA 94117"
+        },
+        {
+          "url": "https://www.esmerestaurantsf.com/",
+          "observedAt": "2026-09-30T22:20:33.054Z",
+          "quote": "Book on RESY. We do not take reservations by email with the exception of private dining for groups of 11+."
+        },
+        {
+          "url": "https://www.esmerestaurantsf.com/",
+          "observedAt": "2026-09-30T22:20:50.916Z",
+          "quote": "Mon: CLOSED\nTue to Sun: 5pm – 9pm"
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:21:15.738Z",
+          "status": "collection_error",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-01&seats=2",
+              "observedAt": "2026-09-30T22:21:15.738Z",
+              "quote": "Thursday, October 1, 2026. Selected date."
+            },
+            {
+              "url": "https://api.resy.com/4/find",
+              "observedAt": "2026-09-30T22:21:15Z",
+              "quote": "OPTIONS https://api.resy.com/4/find (Other) 500"
+            },
+            {
+              "url": "https://api.resy.com/4/venue/calendar?venue_id=97467&num_seats=2&start_date=2026-09-30&end_date=2027-09-30",
+              "observedAt": "2026-09-30T22:21:15Z",
+              "quote": "OPTIONS https://api.resy.com/4/venue/calendar?venue_id=97467&num_seats=2&start_date=2026-09-30&end_date=2027-09-30 (Other) 500"
+            }
+          ]
+        },
+        {
+          "diningDate": "2026-10-08",
+          "observedAt": "2026-09-30T22:24:37Z",
+          "status": "collection_error",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/esme-ca?date=2026-10-08&seats=2",
+              "observedAt": "2026-09-30T22:24:37Z",
+              "quote": "Date Thu., Oct. 8; Guests 2 Guests; Time All Day. Inventory wait timed out after 25000ms."
+            },
+            {
+              "url": "https://api.resy.com/4/find",
+              "observedAt": "2026-09-30T22:24:37Z",
+              "quote": "OPTIONS https://api.resy.com/4/find (Other) 500"
+            },
+            {
+              "url": "https://api.resy.com/4/venue/calendar?venue_id=97467&num_seats=2&start_date=2026-09-30&end_date=2027-09-30",
+              "observedAt": "2026-09-30T22:24:37Z",
+              "quote": "OPTIONS https://api.resy.com/4/venue/calendar?venue_id=97467&num_seats=2&start_date=2026-09-30&end_date=2027-09-30 (Other) 500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Izakaya Rintaro",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/izakaya-rintaro",
+      "address": "82 14th Street, San Francisco, CA 94103",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Public regular Resy dinner reservations for 1–8 guests; indoor and outdoor daily dining. Inventory could not load; card-exclusive offers would be excluded.",
+      "bookingPolicy": "Reservations released 28 days in advance at 10:00 a.m.; timezone unstated. Open 17:00 daily, last seating 22:00. Parties of two have 1.75-hour table allocation.",
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/izakaya-rintaro?date=2026-10-01&seats=2",
+          "observedAt": "2026-09-30T22:23:54.573Z",
+          "quote": "GENERAL RESERVATIONS: Reservations for 1-8 guests are available 28 days in advance starting at 10:00 a.m."
+        },
+        {
+          "url": "https://izakayarintaro.com/",
+          "observedAt": "2026-09-30T22:24:15.434Z",
+          "quote": "82 14TH STREET\nSAN FRANCISCO, CA"
+        },
+        {
+          "url": "https://izakayarintaro.com/",
+          "observedAt": "2026-09-30T22:24:15.434Z",
+          "quote": "INDOOR AND OUTDOOR DINING\nOpen 5:00 p.m. daily, last seating 10:00 p.m."
+        },
+        {
+          "url": "https://izakayarintaro.com/",
+          "observedAt": "2026-09-30T22:24:15.434Z",
+          "quote": "Reservations are bookable through Resy up to 28 days in advance starting at 10:00 a.m. Walk-in seating is very limited."
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:23:54.573Z",
+          "status": "collection_error",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/izakaya-rintaro?date=2026-10-01&seats=2",
+              "observedAt": "2026-09-30T22:23:54.573Z",
+              "quote": "Rendered controls: #party_size value=\"2\"; #DropdownGroup__selector--date--selection text=\"Tomorrow\"; #time value=\"All Day\". Zero button.ReservationButton elements and zero .ShiftInventory__availability-message elements."
+            },
+            {
+              "url": "https://api.resy.com/4/find",
+              "observedAt": "2026-09-30T22:23:54.573Z",
+              "quote": "Read-only browser network inspection: OPTIONS https://api.resy.com/4/find (Other) 500; subsequent POST inventory request had no HTTP response status."
+            },
+            {
+              "url": "https://api.resy.com/4/venue/calendar?venue_id=339&num_seats=2&start_date=2026-09-30&end_date=2027-09-30",
+              "observedAt": "2026-09-30T22:23:54.573Z",
+              "quote": "Read-only browser network inspection: OPTIONS calendar request (Other) 500; subsequent GET inventory request had no HTTP response status."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Flour + Water",
+      "resyUrl": "https://resy.com/cities/san-francisco-ca/venues/flour-and-water",
+      "address": "2401 Harrison St, San Francisco, CA 94110",
+      "geography": "san_francisco",
+      "eligibility": "eligible",
+      "reason": "Official nightly dinner service and exclusive Resy reservation policy, including recurring pasta tasting menus. Inventory could not load.",
+      "bookingPolicy": "Reservations exclusively through Resy, released 28 days in advance at midnight; timezone unstated. Dinner 17:00–21:30 seven days a week; some space held for walk-ins.",
+      "evidence": [
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/flour-and-water?date=2026-10-01&seats=2",
+          "observedAt": "2026-09-30T22:24:23Z",
+          "quote": "2401 Harrison St\nSan Francisco, CA 94110"
+        },
+        {
+          "url": "https://resy.com/cities/san-francisco-ca/venues/flour-and-water?date=2026-10-01&seats=2",
+          "observedAt": "2026-09-30T22:24:23Z",
+          "quote": "A cornerstone of our experience, an ever-changing pasta tasting menu, is available nightly."
+        },
+        {
+          "url": "https://www.flourandwater.com/",
+          "observedAt": "2026-09-30T22:24:41Z",
+          "quote": "5:00-9:30pm\nseven days a week\nReservations encouraged, walk-ins accepted."
+        },
+        {
+          "url": "https://www.flourandwater.com/faq/",
+          "observedAt": "2026-09-30T22:25:05.880Z",
+          "quote": "If you do not see a reservation online, it is likely not available. Reservations are exclusively available through Resy and will not be made over the phone or email. Reservations are released 28 days in advance at midnight. Please note that we do encourage walk-ins and save a portion of our dining room nightly for walk-in guests."
+        }
+      ],
+      "observations": [
+        {
+          "diningDate": "2026-10-01",
+          "observedAt": "2026-09-30T22:24:33.519Z",
+          "status": "collection_error",
+          "evidence": [
+            {
+              "url": "https://resy.com/cities/san-francisco-ca/venues/flour-and-water?date=2026-10-01&seats=2",
+              "observedAt": "2026-09-30T22:24:33.519Z",
+              "quote": "Read-only DOM inspection: #party_size value=\"2\"; #DropdownGroup__selector--date--selection text=\"Tomorrow\"; #time value=\"All Day\", selected option=\"All Day\"; .ShiftInventory__availability-message count=0; button.ReservationButton count=0."
+            },
+            {
+              "url": "https://api.resy.com/4/find",
+              "observedAt": "2026-09-30T22:24:23Z",
+              "quote": "agent-browser network requests: OPTIONS https://api.resy.com/4/find (Other) 500. The corresponding browser-initiated POST inventory request had no reported successful response status."
+            },
+            {
+              "url": "https://api.resy.com/4/venue/calendar?venue_id=6291&num_seats=2&start_date=2026-09-30&end_date=2027-09-30",
+              "observedAt": "2026-09-30T22:24:23Z",
+              "quote": "agent-browser network requests: OPTIONS calendar request (Other) 500. The corresponding browser-initiated GET had no reported successful response status."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

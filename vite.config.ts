@@ -71,14 +71,21 @@ const config = defineConfig({
     options: { typeAware: true, typeCheck: true },
   },
   resolve: { tsconfigPaths: true },
-  plugins: lazyPlugins(() => [
-    devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact(),
-    babel({ presets: [reactCompilerPreset()] }),
-  ]),
+  plugins: lazyPlugins(() => {
+    // Data tests need Vite's runner, not Nitro's application server or route generation.
+    if (process.env.VITEST) {
+      return [];
+    }
+
+    return [
+      devtools(),
+      nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+      tailwindcss(),
+      tanstackStart(),
+      viteReact(),
+      babel({ presets: [reactCompilerPreset()] }),
+    ];
+  }),
 });
 
 export default config;

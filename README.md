@@ -1,233 +1,85 @@
-Welcome to your new TanStack Start app!
+# Resy SF reservation scarcity
 
-# Getting Started
+A local SQLite/Drizzle dataset for prioritizing San Francisco restaurants that
+are hard to access through public Resy reservations for two. Zod validates
+collection artifacts before import; source evidence and history are preserved.
 
-To run this application:
+## Run
 
-```bash
-bun install
-bun --bun run dev
+```sh
+vp install
+vp run data --help
+vp run data migrate
+for file in data/collections/*.json; do
+  vp run data import "$file" || break
+done
+vp run data report
 ```
 
-# Building For Production
+`DATABASE_URL` selects the SQLite file, defaulting to `dev.db`; configuration also
+reads `.env.local` and `.env`. Databases stay local. Checked-in collection JSON
+and Drizzle migrations reproduce the data. Exact re-imports are no-ops; changed
+evidence needs a new collection ID. Imports are atomic per artifact.
 
-To build this application for production:
+## Score
 
-```bash
-bun --bun run build
+Dinner means a public regular reservation for two starting 18:00–21:00 inclusive
+in San Francisco local time. Public tasting menus, counter seats, and outdoor
+tables count; events, waitlists, and card/member-only offers do not.
+
+Collect tomorrow through day 28. Compare restaurants over the same days 1–7 for
+the headline score, with separate supporting bands for days 8–14, 15–21, and
+22–28:
+
+```text
+score = 100 × unavailable dinner dates / assessed dinner dates
+assessed = available dates + unavailable dates
 ```
 
-## Styling
+Dates have equal weight. One qualifying slot makes a date available; slot counts
+do not reveal table capacity. Confirmed non-service dates leave the denominator.
+Publish a band only if every date is assessed or confirmed non-service, with at
+least one assessed date. Missing, unknown, unreleased, or failed dates produce a
+null score. Closed, other-platform, event-only, and unresolved venues remain
+unscored. An empty calendar alone does not establish released, booked inventory.
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+The fixed 0–100 scale does not change when the subset grows. A common headline
+week prevents short booking windows from earning points for unreleased weeks.
+Show denominators and policies because service schedules still differ. Higher
+means observed scarcity, not proven demand, occupancy, prestige, or a forecast.
 
-### Removing Tailwind CSS
+The `restaurant_ranking` view selects each venue's latest completed collection;
+`report` sorts scores descending, nulls last, then names without breaking score
+ties. Show observation intervals: the view can mix collection dates and never
+silently substitutes older complete scores for newer incomplete captures.
 
-If you prefer not to use Tailwind CSS:
+## Initial dataset: September 30, 2026
 
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
+**No publishable headline scores yet.** The database contains 14 discovered
+listings, three confirmed SF dinner venues, and 32 dated observations. Discovery
+covered the initial Climbing, Top Rated, and New on Resy sections without
+pagination. This depth-first convenience subset is not a citywide ranking.
 
-## Deploy with Nitro
+An early Esme capture recorded 28 dates: three available, four Monday closures,
+and 21 unknown because its two-person release policy was unestablished. Later
+inventory preflights returned HTTP 500 across Esme, Rintaro, and Flour + Water,
+also reproduced by the parent browser session. Expansion stopped rather than
+retrying broadly or calling failures booked. The underlying cause is unresolved.
 
-This project uses Nitro as a generic server adapter, so it can run on any Node-compatible host.
+[Collection artifacts](data/collections/) contain source quotes, timestamps,
+selection rules, each scout's procedure, and limitations. Use `data inspect`
+(see `--help`) for full stored evidence. Resume with a new snapshot after a
+representative browser session can load inventory successfully. The importer is
+rerunnable; unattended browser collection and forecasting are not implemented.
 
-```bash
-npm run build
-node dist/server/index.mjs
+[CONTEXT.md](CONTEXT.md) defines the domain terms.
+
+## Verify
+
+```sh
+vp check
+vp test
+vp build
 ```
 
-The build output is a self-contained Node server. To deploy, push the `dist/` directory to your host (Render, Fly.io, your own VPS, etc.) and run the server command above.
-
-For host-specific presets (Vercel, Netlify, Cloudflare, AWS Lambda, etc.) and tuning, see https://v3.nitro.build/deploy.
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
-
-```bash
-pnpm dlx shadcn@latest add button
-```
-
-## Setting up Better Auth
-
-1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
-
-   ```bash
-   bunx --bun @better-auth/cli secret
-   ```
-
-2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
-
-### Adding a Database (Optional)
-
-Better Auth can work in stateless mode, but to persist user data, add a database:
-
-```typescript
-// src/lib/auth.ts
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-
-export const auth = betterAuth({
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-  }),
-  // ... rest of config
-});
-```
-
-Then run migrations:
-
-```bash
-bunx --bun @better-auth/cli migrate
-```
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "My App" },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-});
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from "@tanstack/react-start";
-
-const getServerTime = createServerFn({
-  method: "GET",
-}).handler(async () => {
-  return new Date().toISOString();
-});
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    getServerTime().then(setTime);
-  }, []);
-
-  return <div>Server time: {time}</div>;
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from "@tanstack/react-router";
-import { json } from "@tanstack/react-start";
-
-export const Route = createFileRoute("/api/hello")({
-  server: {
-    handlers: {
-      GET: () => json({ message: "Hello, World!" }),
-    },
-  },
-});
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/people")({
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json();
-  },
-  component: PeopleComponent,
-});
-
-function PeopleComponent() {
-  const data = Route.useLoaderData();
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  );
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+Tests use migrated in-memory SQLite databases, not the collected dataset.
