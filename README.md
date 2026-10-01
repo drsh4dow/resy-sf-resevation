@@ -14,69 +14,13 @@ vp dev --port 3000
 ```
 
 Open **<http://localhost:3000>**. The checked-in `dev.db` is ready to use;
-no Resy credentials, collection run, or database setup is needed.
+no Resy credentials, collection run, or database setup is needed. The page reads
+saved observations, not live inventory.
 
 Expand a restaurant to inspect its 28-day calendar and available dinner times.
 **Needs review** holds incomplete or unresolved venues; **Excluded** explains
 out-of-scope listings. Search filters the selected group. Expanded rows have
 shareable URLs.
-
-## The snapshot
-
-Collected **September 30, 2026**, for **October 1–28**. Collection is stopped;
-the page reads saved observations, not live inventory.
-
-| Latest classification               | Restaurants |
-| :---------------------------------- | ----------: |
-| Scored                              |          40 |
-| Needs review                        |          79 |
-| Excluded                            |          75 |
-| Total native Resy listings retained |         194 |
-
-The highest headline scores are **7 Adams: 75.2** (5/7 dates without an opening)
-and **Izakaya Rintaro: 67.9** (4/7). The other 38 scores range from 3.6 to 13.3,
-reflecting their available dinner-time choices. These are leaders within the
-scored subset, not a citywide claim.
-
-Broad search found 193 native Resy listings across 28 dates. City-list discovery
-added Esin, excluded by its Danville address. Another 141 external Tock listings
-remain in provenance, not the ranking. Twelve candidates received policy
-review, prioritizing ambiguous eligibility and potentially scarce inventory.
-This uses the exercise's subset allowance; unresolved cases remain unscored.
-
-## Scoring
-
-A qualifying opening is a public, regular reservation for **two**, starting
-**18:00–21:00 inclusive**, in `America/Los_Angeles`. Public tasting menus,
-counter seats, and outdoor tables count; events, waitlists, takeout, and
-card/member-only inventory do not.
-
-For each assessed dinner date, let `n` be its distinct available start times:
-
-```text
-night points = 100 if n = 0; otherwise 50 / (1 + n)
-score = mean(night points)
-```
-
-This is an equal-weight blend of the proportion of nights without openings and
-mean limited choice, `1 / (1 + n)`. The reciprocal gives diminishing returns for
-extra times without inventing total capacity. The weights are a heuristic, not
-calibrated against bookings or occupancy. One time earns 25 points, four earn
-10, and no opening earns 100.
-
-- The headline compares days 1–7 after observation. Later seven-day bands remain
-  in the data export but are not shown on the page.
-- Each assessed date has equal weight. Seating types at the same start time
-  count once. Neither available times nor their sum reveals table capacity.
-- Confirmed non-service dates leave the denominator. Every date must be
-  accounted for, with at least one assessed service date, to publish a score.
-- Unknown, missing, unreleased, or failed dates produce a **null score**.
-  Closed, event-only, other-platform-only, and out-of-city venues cannot earn
-  scarcity points.
-
-The fixed 0–100 scale does not change as the subset grows. Scores approach zero
-as choices increase; 100 means no openings on any assessed date. Total inventory
-and occupied slots are unknown. The score does not predict future demand.
 
 ## Process
 
@@ -158,7 +102,7 @@ vp run data rescore
 
 Rescoring atomically replaces derived scores and updates their version, without
 changing source observations or import hashes. It is safe to repeat after an
-interruption. The checked-in database uses `dinner-choice-scarcity-v2`.
+interruption.
 
 Rebuild in a separate database, without contacting Resy:
 
