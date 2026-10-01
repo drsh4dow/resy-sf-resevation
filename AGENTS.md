@@ -1,6 +1,6 @@
 # Resy SF Busyness Index
 
-A reproducible analysis of San Francisco restaurants on Resy that ranks reservation scarcity for parties of two using normalized scores and visible supporting signals, while distinguishing genuinely booked restaurants from closed venues, event-only listings, and restaurants not accepting regular Resy reservations.
+Always read CONTEXT.md for the domain language.
 
 ## Using Vite+, the Unified Toolchain for the Web
 
