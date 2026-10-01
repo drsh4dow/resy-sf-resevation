@@ -195,5 +195,10 @@ vp build
 Tests use migrated in-memory SQLite. Run the production build with
 `node .output/server/index.mjs` from the repository root.
 
-Before submission, include an export of the coding-agent conversation with
-credentials redacted. That transcript is not included in this repository.
+## Coding-agent conversations
+
+[`.session/`](.session/) contains the raw Pi session files, copied without
+modification. The [main conversation thread][main-session] is the largest
+session file. The other files contain additional conversations.
+
+[main-session]: .session/2026-09-30T22-22-28-408Z_01a0f469-7a37-701f-a34f-24169719f5df.jsonl
