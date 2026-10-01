@@ -278,6 +278,10 @@ it("rescores saved observations without changing evidence or breaking import ret
 
 it("validates dates, geography, dinner times, and evidence at the import boundary", () => {
   const valid = collection("valid", [restaurant([observation(1)])]);
+  const malformedUrl = structuredClone(valid);
+  malformedUrl.restaurants[0].resyUrl = "not-a-url";
+  expect(collectionSchema.safeParse(malformedUrl).success).toBe(false);
+
   const duplicate = structuredClone(valid);
   duplicate.restaurants[0].observations.push(observation(1));
   expect(collectionSchema.safeParse(duplicate).success).toBe(false);

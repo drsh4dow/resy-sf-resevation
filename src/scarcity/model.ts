@@ -14,11 +14,14 @@ const date = z.iso.date();
 
 const httpUrl = z.url({ protocol: /^https?$/ });
 
-const resyUrl = z.url({ protocol: /^https$/, hostname: /^resy\.com$/ }).refine((value) => {
-  const url = new URL(value);
+// Stop invalid URLs before the pathname refinement calls the URL constructor.
+const resyUrl = z
+  .url({ protocol: /^https$/, hostname: /^resy\.com$/, abort: true })
+  .refine((value) => {
+    const url = new URL(value);
 
-  return /^\/cities\/[^/]+\/venues\/[^/]+$/.test(url.pathname) && !url.search && !url.hash;
-}, "Use a canonical Resy venue URL without query parameters or a trailing slash");
+    return /^\/cities\/[^/]+\/venues\/[^/]+$/.test(url.pathname) && !url.search && !url.hash;
+  }, "Use a canonical Resy venue URL without query parameters or a trailing slash");
 
 const localDateFormatter = new Intl.DateTimeFormat("en-CA", {
   timeZone: TIME_ZONE,

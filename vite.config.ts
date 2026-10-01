@@ -21,11 +21,13 @@ const toolingIgnorePatterns = [
   ".roo/**",
   ".windsurf/**",
   "tools/oxlint/anti-slop/**",
+  // TanStack owns this file's formatting and emits its own type-check directive.
+  "src/routeTree.gen.ts",
 ];
 
 const config = defineConfig({
   staged: {
-    "*": "vp check --fix",
+    "*": "vp check --fix --no-error-on-unmatched-pattern",
   },
   fmt: {
     ignorePatterns: toolingIgnorePatterns,
@@ -79,7 +81,13 @@ const config = defineConfig({
 
     return [
       devtools(),
-      nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+      nitro({
+        rollupConfig: { external: [/^@sentry\//] },
+        rolldownConfig: {
+          // This SSR app has no React Server Component directive boundaries.
+          checks: { moduleLevelDirective: false },
+        },
+      }),
       tailwindcss(),
       tanstackStart(),
       viteReact(),

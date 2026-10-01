@@ -178,8 +178,9 @@ export function RankingPage({
                       </td>
                       <td className="score-cell">
                         {restaurant.score === null ? (
-                          <span className="unscored" aria-label="Not scored">
-                            —
+                          <span className="unscored">
+                            <span aria-hidden="true">—</span>
+                            <span className="sr-only">Not scored</span>
                           </span>
                         ) : (
                           <>
