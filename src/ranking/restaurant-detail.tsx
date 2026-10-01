@@ -2,40 +2,9 @@ import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
 import { addDays } from "../scarcity/model.ts";
-import type { Evidence } from "../scarcity/model.ts";
-import { formatDay, formatInstant, formatScore, formatWeekday, statusLabel } from "./format.ts";
+import { formatDay, formatDinnerTime, formatWeekday, statusLabel } from "./format.ts";
 import type { DayStatus } from "./format.ts";
 import type { RestaurantDetailData } from "./ranking.functions.ts";
-
-function SourceNotes({ evidence }: { evidence: Evidence[] }) {
-  const unique = new Map(
-    evidence.map((item) => [`${item.url}\n${item.observedAt}\n${item.quote}`, item]),
-  );
-
-  return (
-    <ul className="source-notes">
-      {[...unique].map(([key, item]) => {
-        const url = new URL(item.url);
-
-        return (
-          <li key={key}>
-            <blockquote>{item.quote}</blockquote>
-            <p>
-              {url.hostname === "api.resy.com" ? (
-                <span>Captured Resy API response</span>
-              ) : (
-                <a href={item.url} target="_blank" rel="noreferrer">
-                  {url.hostname} <ArrowUpRight size={12} aria-hidden="true" />
-                </a>
-              )}{" "}
-              <span>· {formatInstant(item.observedAt)}</span>
-            </p>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
 
 export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
   const { restaurant, observations } = detail;
@@ -51,16 +20,12 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
 
   const selected = byDate.get(selectedDate);
   const selectedStatus = selected?.status ?? "missing";
-  const sourceEvidence = selected ? [...selected.evidence] : [];
-
-  if (selected?.status === "unavailable")
-    sourceEvidence.push(selected.releaseEvidence, selected.serviceEvidence);
   const showCalendar = restaurant.eligibility !== "excluded" && observations.length > 0;
 
   return (
-    <article className="restaurant-detail" aria-label={`${restaurant.name} evidence`}>
+    <article className="restaurant-detail" aria-label={`${restaurant.name} availability`}>
       <header className="detail-heading">
-        <p>{restaurant.address ?? "Street address not verified"}</p>
+        <p>{restaurant.address ?? "Address not verified"}</p>
         <a href={restaurant.resyUrl} target="_blank" rel="noreferrer">
           Open on Resy <ArrowUpRight size={14} aria-hidden="true" />
         </a>
@@ -75,21 +40,9 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
       {showCalendar ? (
         <div className="detail-grid">
           <section aria-label="Dinner availability by date">
-            <div className="band-scores">
-              {detail.bands.map((band) => (
-                <div key={band.startDay}>
-                  <span>
-                    Days {band.startDay}–{band.endDay}
-                  </span>
-                  <strong>{band.score === null ? "—" : formatScore(band.score)}</strong>
-                  <small>
-                    {band.score === null
-                      ? "Incomplete"
-                      : `${band.unavailable}/${band.assessed} no opening`}
-                  </small>
-                </div>
-              ))}
-            </div>
+            <h2 className="calendar-heading">
+              {formatDay(days[0].diningDate)} – {formatDay(days[27].diningDate)}
+            </h2>
             <div className="dinner-calendar">
               {days.slice(0, 7).map((day) => (
                 <span className="weekday-label" key={day.diningDate}>
@@ -124,65 +77,30 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
               </li>
               <li>
                 <span className="day-mark" data-status="unknown" />
-                Unknown / unchecked
+                Unconfirmed
               </li>
             </ul>
           </section>
-          <section className="date-evidence" aria-live="polite">
-            <h2>
-              {formatDay(selectedDate)} <span>{statusLabel[selectedStatus]}</span>
-            </h2>
+          <section className="date-availability" aria-live="polite">
+            <h2>{formatDay(selectedDate)}</h2>
             {selected?.status === "available" ? (
-              <p>
-                Observed dinner starts:{" "}
-                {[...new Set(selected.slots.map((slot) => slot.time))].join(", ")}. Local time,
-                party of two.
-              </p>
-            ) : null}
-            {selectedStatus === "missing" ? (
-              <p>
-                This date was not captured for this restaurant. It is not counted as unavailable.
-              </p>
-            ) : null}
-            {selectedStatus === "unknown" ? (
-              <p>
-                The evidence does not establish availability or a released, unavailable dinner date.
-                This date prevents a score for its week.
-              </p>
-            ) : null}
-            {selectedStatus === "unavailable" ? (
-              <p>
-                No qualifying public dinner opening was observed. Release and regular service are
-                supported by the sources below; this does not prove full occupancy.
-              </p>
-            ) : null}
-            {selected ? (
-              <p className="observed-at">Observed {formatInstant(selected.observedAt)}</p>
-            ) : null}
-            {sourceEvidence.length > 0 ? (
-              <details className="evidence-disclosure">
-                <summary>Evidence for this date</summary>
-                <SourceNotes evidence={sourceEvidence} />
-              </details>
-            ) : null}
+              <>
+                <p>
+                  {selected.times.length} dinner time{selected.times.length === 1 ? "" : "s"}{" "}
+                  available
+                </p>
+                <ul className="dinner-times" aria-label="Available dinner times">
+                  {selected.times.map((time) => (
+                    <li key={time}>{formatDinnerTime(time)}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p>{statusLabel[selectedStatus]}</p>
+            )}
           </section>
         </div>
       ) : null}
-      {restaurant.bookingPolicy ? (
-        <p className="booking-policy">
-          <strong>Booking policy.</strong> {restaurant.bookingPolicy}
-        </p>
-      ) : null}
-      <details className="evidence-disclosure">
-        <summary>Restaurant sources &amp; collection notes</summary>
-        <SourceNotes evidence={detail.evidence} />
-        <p className="collection-selection">{detail.collection.selection}</p>
-        <ul className="collection-limitations">
-          {detail.collection.limitations.map((limitation) => (
-            <li key={limitation}>{limitation}</li>
-          ))}
-        </ul>
-      </details>
     </article>
   );
 }

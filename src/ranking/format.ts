@@ -1,4 +1,3 @@
-import { TIME_ZONE } from "../scarcity/model.ts";
 import type { Observation } from "../scarcity/model.ts";
 
 export type DayStatus = Observation["status"] | "missing";
@@ -26,15 +25,6 @@ const snapshotFormat = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
 });
 
-const instantFormat = new Intl.DateTimeFormat("en-US", {
-  timeZone: TIME_ZONE,
-  month: "short",
-  day: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  timeZoneName: "short",
-});
-
 const weekdayFormat = new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "short" });
 
 export function formatDay(day: string) {
@@ -49,8 +39,11 @@ export function formatWeekday(day: string) {
   return weekdayFormat.format(new Date(`${day}T12:00:00Z`));
 }
 
-export function formatInstant(instant: string) {
-  return instantFormat.format(new Date(instant));
+/** Dinner starts are validated as 18:00–21:00, so every time is p.m. */
+export function formatDinnerTime(time: string) {
+  const [hour, minute] = time.split(":");
+
+  return `${Number(hour) - 12}:${minute} p.m.`;
 }
 
 export function formatScore(score: number) {

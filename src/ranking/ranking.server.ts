@@ -3,10 +3,11 @@ import { and, eq, sql } from "drizzle-orm";
 import * as tables from "../db/schema.ts";
 import { addDays } from "../scarcity/model.ts";
 import type { Observation } from "../scarcity/model.ts";
+import { availableDinnerTimes } from "../scarcity/score.ts";
 import { readRanking } from "../scarcity/store.ts";
 import type { ScarcityDatabase } from "../scarcity/store.ts";
 
-/** Summary rows stay small; only the opened restaurant includes slots and source quotes. */
+/** Return booking choices, not the collection's source quotes and internal notes. */
 export function readRankingPage(db: ScarcityDatabase, selectedUrl?: string) {
   return db.transaction((transaction) => {
     const rows = readRanking(transaction);
@@ -49,10 +50,6 @@ export function readRankingPage(db: ScarcityDatabase, selectedUrl?: string) {
       eligibilityReason: row.eligibilityReason,
       score: row.score,
       scoreReason: row.scoreReason,
-      unavailable: row.unavailable,
-      assessed: row.assessed,
-      nonService: row.nonService,
-      earliestAvailableDate: row.earliestAvailableDate,
       week: Array.from({ length: 7 }, (_, index) => {
         const diningDate = addDays(row.anchorDate, index + 1);
 
@@ -63,32 +60,14 @@ export function readRankingPage(db: ScarcityDatabase, selectedUrl?: string) {
       }),
     }));
 
-    const selected = rows.find((row) => row.resyUrl === selectedUrl);
+    const selectedIndex = rows.findIndex((row) => row.resyUrl === selectedUrl);
+    const selected = rows[selectedIndex];
+    const restaurant = restaurants[selectedIndex];
     let detail = null;
 
-    if (selected) {
-      const identity = and(
-        eq(tables.restaurantSnapshots.collectionId, selected.collectionId),
-        eq(tables.restaurantSnapshots.resyUrl, selected.resyUrl),
-      );
-
-      const snapshot = transaction.select().from(tables.restaurantSnapshots).where(identity).get();
-
-      const collection = transaction
-        .select({
-          id: tables.collections.id,
-          selection: tables.collections.selection,
-          limitations: tables.collections.limitations,
-        })
-        .from(tables.collections)
-        .where(eq(tables.collections.id, selected.collectionId))
-        .get();
-
-      if (!snapshot || !collection) throw new Error("Ranking references a missing snapshot");
+    if (selected && restaurant) {
       detail = {
-        restaurant: selected,
-        evidence: snapshot.evidence,
-        collection,
+        restaurant,
         observations: transaction
           .select({ detail: tables.dinnerObservations.detail })
           .from(tables.dinnerObservations)
@@ -100,18 +79,11 @@ export function readRankingPage(db: ScarcityDatabase, selectedUrl?: string) {
           )
           .orderBy(tables.dinnerObservations.diningDate)
           .all()
-          .map((row) => row.detail),
-        bands: transaction
-          .select()
-          .from(tables.scarcityScores)
-          .where(
-            and(
-              eq(tables.scarcityScores.collectionId, selected.collectionId),
-              eq(tables.scarcityScores.resyUrl, selected.resyUrl),
-            ),
-          )
-          .orderBy(tables.scarcityScores.startDay)
-          .all(),
+          .map(({ detail: observation }) => ({
+            diningDate: observation.diningDate,
+            status: observation.status,
+            times: availableDinnerTimes(observation),
+          })),
       };
     }
 

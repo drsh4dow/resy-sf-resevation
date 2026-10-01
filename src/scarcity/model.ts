@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const TIME_ZONE = "America/Los_Angeles";
 
-export const SCORE_VERSION = "dinner-date-scarcity-v1";
+export const SCORE_VERSION = "dinner-choice-scarcity-v2";
 
 const nonempty = z.string().trim().min(1);
 

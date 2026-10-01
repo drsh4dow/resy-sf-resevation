@@ -28,7 +28,11 @@ and offers restricted by membership or card eligibility do not qualify.
 
 **Available dinner date**:
 A date with at least one regular dinner reservation for two starting within the
-dinner window. Each date counts equally, regardless of its available time slots.
+dinner window.
+
+**Available dinner time**:
+A distinct reservation start time within the dinner window, counted once per
+night across seating types. It measures choice, not the number of free tables.
 
 **Booking window**:
 The period for which a restaurant has released reservations at the time of an
@@ -40,9 +44,9 @@ reservations, with sufficient evidence to determine availability. Non-service
 days, unreleased dates, and uncertain observations do not count as booked dates.
 
 **Scarcity score**:
-The percentage of assessed dinner dates without a qualifying reservation, on a
-fixed 0–100 scale. Excluded and unresolved restaurants have no score, rather than
-a score of zero.
+A fixed-scale booking-difficulty heuristic combining nights without openings
+and limited dinner-time choices with equal weight. Higher means harder access;
+excluded and unresolved restaurants have no score, rather than a score of zero.
 _Avoid_: Popularity score, occupancy rate
 
 **Headline score**:

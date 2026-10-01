@@ -5,9 +5,9 @@ import { expect, it, onTestFinished } from "vite-plus/test";
 
 import * as schema from "../db/schema.ts";
 import { readRankingPage } from "../ranking/ranking.server.ts";
-import { addDays, collectionSchema, localDate, observationSchema } from "./model.ts";
+import { addDays, collectionSchema, localDate, observationSchema, SCORE_VERSION } from "./model.ts";
 import type { Observation, RestaurantCapture } from "./model.ts";
-import { importCollection, readRanking } from "./store.ts";
+import { importCollection, readRanking, rescoreCollections } from "./store.ts";
 
 const evidence = {
   url: "https://resy.com/cities/san-francisco-ca/venues/test-restaurant",
@@ -106,7 +106,7 @@ it("scores a common week, excludes non-service dates, and retains later bands an
 
   expect(readRanking(db)).toMatchObject([
     {
-      score: 40,
+      score: 55,
       available: 3,
       unavailable: 2,
       assessed: 5,
@@ -116,7 +116,7 @@ it("scores a common week, excludes non-service dates, and retains later bands an
     },
   ]);
   expect(db.select().from(schema.scarcityScores).all()).toMatchObject([
-    { startDay: 1, score: 40 },
+    { startDay: 1, score: 55 },
     { startDay: 8, score: 100 },
     { startDay: 15, score: null, missing: 7 },
     { startDay: 22, score: null, missing: 7 },
@@ -185,14 +185,8 @@ it("retries imports without duplication, rejects changed evidence, and preserves
   const page = readRankingPage(db, evidence.url);
   expect(page.restaurants[0].week.map((day) => day.status)).toEqual(Array(7).fill("missing"));
   expect(page.detail).toMatchObject({
-    collection: { id: "latest" },
+    restaurant: { score: null },
     observations: [],
-    bands: [
-      { startDay: 1, score: null, missing: 7 },
-      { startDay: 8 },
-      { startDay: 15 },
-      { startDay: 22 },
-    ],
   });
   expect(readRankingPage(db).detail).toBeNull();
   expect(db.select().from(schema.restaurantSnapshots).all()).toHaveLength(3);
@@ -212,7 +206,74 @@ it("keeps a fixed score as the subset grows and sorts scored restaurants ahead o
   unresolved.resyUrl = `${evidence.url}-unresolved`;
   unresolved.eligibility = "unresolved";
   importCollection(db, collection("expansion", [open, unresolved]));
-  expect(readRanking(db).map((row) => row.score)).toEqual([100, 0, null]);
+  expect(readRanking(db).map((row) => row.score)).toEqual([100, 25, null]);
+});
+
+it("counts distinct times, averages daily scarcity, and ignores seating-type duplication", () => {
+  const db = openTestDatabase();
+
+  const first = observationSchema.parse({
+    ...observation(1),
+    slots: [
+      { time: "18:30", type: "Dining room", price: null },
+      { time: "18:30", type: "Counter", price: null },
+    ],
+  });
+
+  const second = observationSchema.parse({
+    ...observation(2),
+    slots: [
+      { time: "21:00", type: "Dining room", price: null },
+      { time: "18:00", type: "Dining room", price: null },
+      { time: "19:30", type: "Dining room", price: null },
+    ],
+  });
+
+  const observations = [
+    first,
+    second,
+    ...Array.from({ length: 5 }, (_, index) => observation(index + 3, "non_service")),
+  ];
+
+  importCollection(db, collection("choices", [restaurant(observations)]));
+
+  // One time earns 25 points, three earn 12.5. Average the days, not their counts.
+  expect(readRanking(db)[0].score).toBe(18.75);
+  const page = readRankingPage(db, evidence.url);
+  expect(page.detail?.observations.slice(0, 2)).toEqual([
+    { diningDate: "2026-10-01", status: "available", times: ["18:30"] },
+    { diningDate: "2026-10-02", status: "available", times: ["18:00", "19:30", "21:00"] },
+  ]);
+});
+
+it("rescores saved observations without changing evidence or breaking import retries", () => {
+  const db = openTestDatabase();
+
+  const input = collection("saved", [
+    restaurant(Array.from({ length: 7 }, (_, index) => observation(index + 1))),
+  ]);
+
+  importCollection(db, input);
+  // Simulate scores persisted by the previous, date-only formula.
+  db.update(schema.scarcityScores).set({ score: 0 }).run();
+  db.update(schema.collections).set({ scoreVersion: "dinner-date-scarcity-v1" }).run();
+  const savedCollection = db.select().from(schema.collections).get();
+  const savedObservations = db.select().from(schema.dinnerObservations).all();
+  const savedSnapshots = db.select().from(schema.restaurantSnapshots).all();
+
+  expect(rescoreCollections(db)).toEqual({ collections: 1, scoreVersion: SCORE_VERSION });
+  expect(readRanking(db)[0].score).toBe(25);
+  expect(db.select().from(schema.collections).get()).toEqual({
+    ...savedCollection,
+    scoreVersion: SCORE_VERSION,
+  });
+  expect(db.select().from(schema.dinnerObservations).all()).toEqual(savedObservations);
+  expect(db.select().from(schema.restaurantSnapshots).all()).toEqual(savedSnapshots);
+  const scores = db.select().from(schema.scarcityScores).all();
+
+  rescoreCollections(db);
+  expect(db.select().from(schema.scarcityScores).all()).toEqual(scores);
+  expect(importCollection(db, input).imported).toBe(false);
 });
 
 it("validates dates, geography, dinner times, and evidence at the import boundary", () => {

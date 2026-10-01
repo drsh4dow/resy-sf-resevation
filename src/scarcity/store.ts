@@ -1,14 +1,91 @@
 import { createHash } from "node:crypto";
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 import * as schema from "../db/schema.ts";
 import { localDate, SCORE_VERSION } from "./model.ts";
-import type { Collection } from "./model.ts";
+import type { Collection, RestaurantCapture } from "./model.ts";
 import { scoreRestaurant } from "./score.ts";
 
 export type ScarcityDatabase = BetterSQLite3Database<typeof schema>;
+
+function storeScores(
+  db: ScarcityDatabase,
+  collectionId: string,
+  restaurant: RestaurantCapture,
+  anchorDate: string,
+) {
+  for (const band of scoreRestaurant(restaurant, anchorDate)) {
+    db.insert(schema.scarcityScores)
+      .values({
+        collectionId,
+        resyUrl: restaurant.resyUrl,
+        startDay: band.startDay,
+        endDay: band.endDay,
+        available: band.counts.available,
+        unavailable: band.counts.unavailable,
+        nonService: band.counts.non_service,
+        unreleased: band.counts.unreleased,
+        unknown: band.counts.unknown,
+        collectionError: band.counts.collection_error,
+        missing: band.counts.missing,
+        assessed: band.assessed,
+        score: band.score,
+        reason: band.reason,
+      })
+      .run();
+  }
+}
+
+/** Rebuild derived scores atomically; source evidence and import hashes never change. */
+export function rescoreCollections(db: ScarcityDatabase) {
+  return db.transaction((transaction) => {
+    const collections = transaction.select().from(schema.collections).all();
+
+    for (const collection of collections) {
+      transaction
+        .delete(schema.scarcityScores)
+        .where(eq(schema.scarcityScores.collectionId, collection.id))
+        .run();
+
+      const snapshots = transaction
+        .select()
+        .from(schema.restaurantSnapshots)
+        .where(eq(schema.restaurantSnapshots.collectionId, collection.id))
+        .all();
+
+      for (const snapshot of snapshots) {
+        const observations = transaction
+          .select({ detail: schema.dinnerObservations.detail })
+          .from(schema.dinnerObservations)
+          .where(
+            and(
+              eq(schema.dinnerObservations.collectionId, collection.id),
+              eq(schema.dinnerObservations.resyUrl, snapshot.resyUrl),
+            ),
+          )
+          .all()
+          .map((row) => row.detail);
+
+        storeScores(
+          transaction,
+          collection.id,
+          { ...snapshot, observations },
+          collection.anchorDate,
+        );
+      }
+
+      transaction
+        .update(schema.collections)
+        .set({ scoreVersion: SCORE_VERSION })
+        .where(eq(schema.collections.id, collection.id))
+        .run();
+    }
+
+    return { collections: collections.length, scoreVersion: SCORE_VERSION };
+  });
+}
 
 /** Import one validated, immutable collection atomically. Exact retries are no-ops. */
 export function importCollection(db: ScarcityDatabase, collection: Collection) {
@@ -75,26 +152,7 @@ export function importCollection(db: ScarcityDatabase, collection: Collection) {
           .run();
       }
 
-      for (const band of scoreRestaurant(restaurant, anchorDate)) {
-        transaction
-          .insert(schema.scarcityScores)
-          .values({
-            ...identity,
-            startDay: band.startDay,
-            endDay: band.endDay,
-            available: band.counts.available,
-            unavailable: band.counts.unavailable,
-            nonService: band.counts.non_service,
-            unreleased: band.counts.unreleased,
-            unknown: band.counts.unknown,
-            collectionError: band.counts.collection_error,
-            missing: band.counts.missing,
-            assessed: band.assessed,
-            score: band.score,
-            reason: band.reason,
-          })
-          .run();
-      }
+      storeScores(transaction, collection.id, restaurant, anchorDate);
     }
 
     return { imported: true, restaurants: collection.restaurants.length };

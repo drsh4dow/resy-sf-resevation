@@ -90,9 +90,6 @@
   font-size: 12px;
   color: var(--muted-foreground);
 }
-.coverage-note {
-  color: var(--warn);
-}
 .method {
   margin: 18px 0 34px;
   font-size: 13px;
@@ -202,7 +199,7 @@
   vertical-align: -2px;
 }
 .ranking-table th:first-child {
-  width: 38%;
+  width: 60%;
 }
 .ranking-table td {
   padding: 17px 18px;
@@ -270,16 +267,6 @@
 .muted {
   color: var(--muted-foreground);
 }
-.fraction-cell {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.fraction-cell small {
-  display: block;
-  font-size: 10px;
-  color: var(--muted-foreground);
-  margin-top: 3px;
-}
 .week-strip {
   display: grid;
   grid-template-columns: repeat(7, 14px);
@@ -330,10 +317,6 @@
   font-size: 10px;
   line-height: 12px;
 }
-.first-opening {
-  font-size: 13px;
-  white-space: nowrap;
-}
 .table-footer {
   display: flex;
   justify-content: space-between;
@@ -360,15 +343,13 @@
   font-size: 12px;
   color: var(--muted-foreground);
 }
-.detail-heading a,
-.source-notes a {
+.detail-heading a {
   display: inline-flex;
   align-items: center;
   gap: 3px;
   color: #005ac4;
 }
-.detail-heading a:hover,
-.source-notes a:hover {
+.detail-heading a:hover {
   text-decoration: underline;
 }
 .review-reason {
@@ -386,35 +367,10 @@
   gap: 44px;
   margin-top: 24px;
 }
-.band-scores {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 18px;
-}
-.band-scores > div {
-  border-left: 1px solid #d8d8d8;
-  padding-left: 12px;
-}
-.band-scores > div:first-child {
-  border: 0;
-  padding-left: 0;
-}
-.band-scores span {
-  display: block;
-  font-size: 10px;
-  color: var(--muted-foreground);
-}
-.band-scores strong {
-  display: block;
-  margin: 3px 0;
-  font-size: 22px;
+.calendar-heading {
+  margin-bottom: 16px;
+  font-size: 13px;
   font-weight: 550;
-  font-variant-numeric: tabular-nums;
-}
-.band-scores small {
-  display: block;
-  font-size: 10px;
-  color: var(--muted-foreground);
 }
 .dinner-calendar {
   display: grid;
@@ -474,73 +430,29 @@
   align-items: center;
   gap: 5px;
 }
-.date-evidence h2 {
+.date-availability h2 {
   font-size: 15px;
   font-weight: 600;
 }
-.date-evidence h2 span {
-  display: block;
-  margin-top: 5px;
-  color: var(--muted-foreground);
-  font-weight: 400;
+.date-availability > p {
+  margin-top: 6px;
   font-size: 13px;
-}
-.date-evidence > p {
-  margin-top: 14px;
-  font-size: 13px;
-  line-height: 1.7;
   color: var(--muted-foreground);
 }
-.date-evidence .observed-at {
-  font-size: 11px;
-}
-.booking-policy {
-  margin: 24px 0 0;
-  max-width: 800px;
-  color: var(--muted-foreground);
-  font-size: 13px;
-  line-height: 1.7;
-}
-.booking-policy strong {
-  color: var(--foreground);
-  font-weight: 550;
-}
-.evidence-disclosure {
-  margin-top: 18px;
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.evidence-disclosure summary {
-  width: fit-content;
-}
-.source-notes {
+.dinner-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 16px;
   list-style: none;
-  padding: 0;
 }
-.source-notes > li + li {
-  margin-top: 18px;
-}
-.source-notes blockquote {
-  border-left: 2px solid #c8c8c8;
-  padding-left: 12px;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  line-height: 1.6;
-  max-width: 850px;
-}
-.source-notes li > p {
-  margin-top: 6px;
-  font-size: 10px;
-}
-.collection-selection {
-  margin-top: 24px;
-}
-.collection-limitations {
-  padding-left: 16px;
-  margin-top: 12px;
-  list-style: disc;
-  line-height: 1.7;
+.dinner-times li {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--card);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
 .retry-button {
   display: block;
@@ -554,9 +466,6 @@
 @media (max-width: 960px) {
   .ranking-table .week-column {
     display: none;
-  }
-  .ranking-table th:first-child {
-    width: 44%;
   }
   .detail-grid {
     gap: 28px;
@@ -597,9 +506,6 @@
   .restaurant-search {
     width: 100%;
   }
-  .ranking-table .opening-column {
-    display: none;
-  }
   .ranking-table th {
     padding: 12px 9px;
     font-size: 10px;
@@ -608,7 +514,7 @@
     padding: 16px 9px;
   }
   .ranking-table th:first-child {
-    width: 54%;
+    width: 75%;
   }
   .restaurant-name {
     font-size: 12px;
@@ -625,9 +531,6 @@
   }
   .score-track {
     width: 42px;
-  }
-  .fraction-cell {
-    font-size: 12px;
   }
   .row-reason {
     margin-left: 17px;

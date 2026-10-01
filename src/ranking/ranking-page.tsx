@@ -71,27 +71,25 @@ export function RankingPage({
           ) : (
             <span>No data collected yet</span>
           )}
-          <span className="coverage-note">Partial coverage, not a citywide ranking</span>
         </div>
         <details className="method">
           <summary>How the score works</summary>
           <div>
             <p>
-              <strong>Score = 100 × dinner dates with no opening ÷ assessed dinner dates.</strong>{" "}
-              Higher means harder access. We compare the same next seven calendar days, starting the
-              day after each snapshot. Each date counts once; the number of slots does not affect
-              the score.
+              <strong>Fewer nights and fewer dinner times available mean a higher score.</strong> We
+              compare the next seven days for a party of two. Each distinct start time counts once,
+              even if several seating options offer it.
             </p>
             <p>
-              Confirmed non-service dates leave the denominator. A score needs every date accounted
-              for and at least one dinner-service date. Unknown, unreleased, missing or failed dates
-              prevent scoring. Closed venues, events, other-platform-only listings and venues
-              outside SF do not earn scarcity points.
+              Each dinner night contributes 100 points with no opening, or 50 ÷ (1 + available
+              times) otherwise: one time gives 25 points; four give 10. The score is the average
+              across dinner nights. This gives equal weight to nights without an opening and limited
+              time choices.
             </p>
             <p>
-              The scale is fixed at 0–100, not a percentile. Later weeks provide context, not extra
-              weight. This measures observed public Resy access, not occupancy, booking volume,
-              prestige or a forecast. Open a restaurant to inspect its dates and sources.
+              Non-service nights are skipped; unconfirmed dates prevent a score. This is a
+              booking-difficulty heuristic, not an occupancy percentage: total tables and occupied
+              slots are unknown. Scores approach zero as choices increase; 100 means no openings.
             </p>
           </div>
         </details>
@@ -125,15 +123,11 @@ export function RankingPage({
           </label>
         </div>
         {group === "review" ? (
-          <p className="group-note">
-            Incomplete observations or unresolved Resy eligibility. These restaurants are not
-            ranked; a missing score does not mean easy access.
-          </p>
+          <p className="group-note">Not enough verified information to score these restaurants.</p>
         ) : null}
         {group === "excluded" ? (
           <p className="group-note">
-            Outside this comparison. Exclusion reasons are based on geography, service or booking
-            evidence, not on empty calendars.
+            Outside this comparison because of location, service or booking platform.
           </p>
         ) : null}
         <div className="ranking-table-wrap">
@@ -148,12 +142,8 @@ export function RankingPage({
                 <th scope="col" aria-sort={group === "ranked" ? "descending" : undefined}>
                   Scarcity {group === "ranked" ? <ArrowDown size={12} aria-hidden="true" /> : null}
                 </th>
-                <th scope="col">No opening</th>
                 <th scope="col" className="week-column">
                   Next 7 nights
-                </th>
-                <th scope="col" className="opening-column">
-                  First opening seen
                 </th>
               </tr>
             </thead>
@@ -200,23 +190,6 @@ export function RankingPage({
                           </>
                         )}
                       </td>
-                      <td className="fraction-cell">
-                        {restaurant.score !== null ? (
-                          <>
-                            <span
-                              title={`${restaurant.unavailable} of ${restaurant.assessed} assessed dinner dates had no qualifying opening`}
-                            >
-                              {restaurant.unavailable}
-                              <span className="muted"> / {restaurant.assessed}</span>
-                            </span>
-                            {restaurant.nonService > 0 ? (
-                              <small>{restaurant.nonService} non-service</small>
-                            ) : null}
-                          </>
-                        ) : (
-                          <span className="muted">—</span>
-                        )}
-                      </td>
                       <td className="week-column">
                         <div className="week-strip">
                           {restaurant.week.map((day) => (
@@ -233,17 +206,10 @@ export function RankingPage({
                           ))}
                         </div>
                       </td>
-                      <td className="opening-column first-opening">
-                        {restaurant.earliestAvailableDate ? (
-                          formatDay(restaurant.earliestAvailableDate)
-                        ) : (
-                          <span className="muted">Not observed</span>
-                        )}
-                      </td>
                     </tr>
                     {expanded && data.detail?.restaurant.resyUrl === restaurant.resyUrl ? (
                       <tr className="detail-row">
-                        <td colSpan={5}>
+                        <td colSpan={3}>
                           <RestaurantDetail key={restaurant.resyUrl} detail={data.detail} />
                         </td>
                       </tr>
@@ -253,7 +219,7 @@ export function RankingPage({
               })}
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="empty-table">
+                  <td colSpan={3} className="empty-table">
                     {query
                       ? "No matching restaurants in this group. Try another name or status."
                       : "No restaurants in this group yet."}
@@ -268,7 +234,6 @@ export function RankingPage({
             {rows.length} restaurant{rows.length === 1 ? "" : "s"}
             {query ? " matching" : " shown"}
           </span>
-          <span>0 = easy access observed. 100 = no qualifying opening on assessed dates.</span>
         </footer>
       </section>
     </main>

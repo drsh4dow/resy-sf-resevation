@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import * as tables from "../db/schema.ts";
 import { collectionSchema } from "./model.ts";
-import { importCollection, readRanking } from "./store.ts";
+import { importCollection, readRanking, rescoreCollections } from "./store.ts";
 
 const help = `Resy SF reservation-scarcity data pipeline
 
@@ -22,6 +22,7 @@ Commands:
   schema                 Print the collection JSON Schema derived from Zod.
   validate <file.json>   Validate evidence without opening or modifying the DB.
   import <file.json>     Validate, score, and atomically store one collection.
+  rescore                Recompute all saved scores with the current formula; no collection.
   report                 Print latest-per-restaurant ranking as JSON, scores first.
   inspect <collection>   Print one collection's provenance, observations, and scores.
 
@@ -57,7 +58,8 @@ Retries and history:
   release/service/closure policies need evidence-based review before scoring them.
   Exact re-imports are no-ops. Changed evidence requires a new collection ID.
   Failed imports roll back completely. New snapshots preserve prior observations.
-  A snapshot is not a forecast. Keep timestamps and collection limitations visible.
+  Rescoring is atomic and repeatable; source evidence and import hashes stay unchanged.
+  A snapshot is not a forecast. Collection limitations remain in the saved evidence.
 
 Machine-readable output without the Vite+ task banner:
   vp exec tsx src/scarcity/cli.ts report > ranking.json
@@ -157,6 +159,7 @@ async function main() {
     }
 
     case "migrate":
+    case "rescore":
     case "report": {
       if (argument) {
         throw new Error(`Usage: vp run data ${command}`);
@@ -168,6 +171,8 @@ async function main() {
         if (command === "migrate") {
           migrate(db, { migrationsFolder: "drizzle" });
           console.log("Database migrations applied");
+        } else if (command === "rescore") {
+          console.log(JSON.stringify(rescoreCollections(db)));
         } else {
           console.log(JSON.stringify(readRanking(db), null, 2));
         }

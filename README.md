@@ -1,7 +1,7 @@
 # Resy SF · Reservation scarcity
 
-A ranked comparison of public Resy dinner access for two, with the dates,
-booking policies, and evidence behind each score. It measures reservation
+A ranked comparison of public Resy dinner access for two, with available dates
+and dinner-time choices behind each score. It measures reservation
 scarcity, not occupancy or booking volume.
 
 ## Run the page
@@ -16,9 +16,10 @@ vp dev --port 3000
 Open **<http://localhost:3000>**. The checked-in `dev.db` is ready to use;
 no Resy credentials, collection run, or database setup is needed.
 
-Expand a restaurant to inspect its 28-day calendar and sources. **Needs review**
-holds incomplete or unresolved venues; **Excluded** explains out-of-scope
-listings. Search filters the selected group. Expanded rows have shareable URLs.
+Expand a restaurant to inspect its 28-day calendar and available dinner times.
+**Needs review** holds incomplete or unresolved venues; **Excluded** explains
+out-of-scope listings. Search filters the selected group. Expanded rows have
+shareable URLs.
 
 ## The snapshot
 
@@ -32,9 +33,10 @@ the page reads saved observations, not live inventory.
 | Excluded                            |          75 |
 | Total native Resy listings retained |         194 |
 
-The highest headline scores are **7 Adams: 71.4** (5/7 dates without an opening)
-and **Izakaya Rintaro: 57.1** (4/7). The other 38 scores are zero. These are
-leaders within the scored subset, not a citywide claim.
+The highest headline scores are **7 Adams: 75.2** (5/7 dates without an opening)
+and **Izakaya Rintaro: 67.9** (4/7). The other 38 scores range from 3.6 to 13.3,
+reflecting their available dinner-time choices. These are leaders within the
+scored subset, not a citywide claim.
 
 Broad search found 193 native Resy listings across 28 dates. City-list discovery
 added Esin, excluded by its Danville address. Another 141 external Tock listings
@@ -49,22 +51,32 @@ A qualifying opening is a public, regular reservation for **two**, starting
 counter seats, and outdoor tables count; events, waitlists, takeout, and
 card/member-only inventory do not.
 
+For each assessed dinner date, let `n` be its distinct available start times:
+
 ```text
-score = 100 × unavailable dinner dates / (available + unavailable dates)
+night points = 100 if n = 0; otherwise 50 / (1 + n)
+score = mean(night points)
 ```
 
-- The headline compares days 1–7 after observation. Three later seven-day
-  bands provide context without changing it.
-- Each date has equal weight. One qualifying opening makes it available;
-  slot counts do not reveal table capacity.
+This is an equal-weight blend of the proportion of nights without openings and
+mean limited choice, `1 / (1 + n)`. The reciprocal gives diminishing returns for
+extra times without inventing total capacity. The weights are a heuristic, not
+calibrated against bookings or occupancy. One time earns 25 points, four earn
+10, and no opening earns 100.
+
+- The headline compares days 1–7 after observation. Later seven-day bands remain
+  in the data export but are not shown on the page.
+- Each assessed date has equal weight. Seating types at the same start time
+  count once. Neither available times nor their sum reveals table capacity.
 - Confirmed non-service dates leave the denominator. Every date must be
   accounted for, with at least one assessed service date, to publish a score.
 - Unknown, missing, unreleased, or failed dates produce a **null score**.
   Closed, event-only, other-platform-only, and out-of-city venues cannot earn
   scarcity points.
 
-The fixed 0–100 scale does not change as the subset grows. Zero means an opening
-on every assessed date; 100 means none observed. Neither predicts future demand.
+The fixed 0–100 scale does not change as the subset grows. Scores approach zero
+as choices increase; 100 means no openings on any assessed date. Total inventory
+and occupied slots are unknown. The score does not predict future demand.
 
 ## Process
 
@@ -137,6 +149,16 @@ ORDER BY score DESC, name;
 `collections`, `restaurant_snapshots`, `dinner_observations`, and
 `scarcity_scores` retain provenance, history, date-level evidence, and all four
 bands. See `vp run data --help` for schema, validation, and inspection commands.
+
+After a scoring change, recompute saved scores without contacting Resy:
+
+```sh
+vp run data rescore
+```
+
+Rescoring atomically replaces derived scores and updates their version, without
+changing source observations or import hashes. It is safe to repeat after an
+interruption. The checked-in database uses `dinner-choice-scarcity-v2`.
 
 Rebuild in a separate database, without contacting Resy:
 
