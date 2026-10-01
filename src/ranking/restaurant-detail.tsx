@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
 import { addDays } from "../scarcity/model.ts";
+import { availabilityDayClasses, DayMark } from "./availability-day.tsx";
 import { formatDay, formatDinnerTime, formatWeekday, statusLabel } from "./format.ts";
 import type { DayStatus } from "./format.ts";
 import type { RestaurantDetailData } from "./ranking.functions.ts";
@@ -23,29 +24,37 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
   const showCalendar = restaurant.eligibility !== "excluded" && observations.length > 0;
 
   return (
-    <article className="restaurant-detail" aria-label={`${restaurant.name} availability`}>
-      <header className="detail-heading">
+    <article aria-label={`${restaurant.name} availability`}>
+      <header className="flex flex-wrap items-center justify-between gap-2.5 text-xs/normal text-muted-foreground">
         <p>{restaurant.address ?? "Address not verified"}</p>
-        <a href={restaurant.resyUrl} target="_blank" rel="noreferrer">
+        <a
+          className="inline-flex items-center gap-0.75 text-link hover:underline"
+          href={restaurant.resyUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
           Open on Resy <ArrowUpRight size={14} aria-hidden="true" />
         </a>
       </header>
       {restaurant.score === null ? (
-        <p className="review-reason">
+        <p className="mt-3.5 border-l-2 border-warning-border bg-warning px-3 py-2.5 text-[13px] leading-[1.6] text-warning-emphasis">
           {restaurant.eligibility === "eligible"
             ? restaurant.scoreReason
             : restaurant.eligibilityReason}
         </p>
       ) : null}
       {showCalendar ? (
-        <div className="detail-grid">
+        <div className="mt-6 grid grid-cols-[minmax(250px,360px)_minmax(0,1fr)] gap-11 tablet:gap-7 mobile:grid-cols-1 mobile:gap-6">
           <section aria-label="Dinner availability by date">
-            <h2 className="calendar-heading">
+            <h2 className="mb-4 text-[13px] font-[550]">
               {formatDay(days[0].diningDate)} – {formatDay(days[27].diningDate)}
             </h2>
-            <div className="dinner-calendar">
+            <div className="grid grid-cols-7 gap-1.5">
               {days.slice(0, 7).map((day) => (
-                <span className="weekday-label" key={day.diningDate}>
+                <span
+                  className="pb-0.5 text-center text-[11px] text-muted-foreground"
+                  key={day.diningDate}
+                >
                   {formatWeekday(day.diningDate)}
                 </span>
               ))}
@@ -53,6 +62,7 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
                 <button
                   key={day.diningDate}
                   type="button"
+                  className={availabilityDayClasses(day.status, "calendar")}
                   data-status={day.status}
                   aria-pressed={day.diningDate === selectedDate}
                   aria-label={`${formatDay(day.diningDate)}: ${statusLabel[day.status]}`}
@@ -62,41 +72,51 @@ export function RestaurantDetail({ detail }: { detail: RestaurantDetailData }) {
                 </button>
               ))}
             </div>
-            <ul className="calendar-legend">
+            <ul className="mt-3.75 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[11px] text-muted-foreground *:flex *:items-center *:gap-1.25">
               <li>
-                <span className="day-mark" data-status="available" />
+                <DayMark status="available" />
                 Available
               </li>
               <li>
-                <span className="day-mark" data-status="unavailable" />
+                <DayMark status="unavailable" />
                 No opening
               </li>
               <li>
-                <span className="day-mark" data-status="non_service" />
+                <DayMark status="non_service" />
                 No service
               </li>
               <li>
-                <span className="day-mark" data-status="unknown" />
+                <DayMark status="unknown" />
                 Unconfirmed
               </li>
             </ul>
           </section>
-          <section className="date-availability" aria-live="polite">
-            <h2>{formatDay(selectedDate)}</h2>
+          <section aria-live="polite">
+            <h2 className="text-[15px] font-semibold">{formatDay(selectedDate)}</h2>
             {selected?.status === "available" ? (
               <>
-                <p>
+                <p className="mt-1.5 text-[13px] text-muted-foreground">
                   {selected.times.length} dinner time{selected.times.length === 1 ? "" : "s"}{" "}
                   available
                 </p>
-                <ul className="dinner-times" aria-label="Available dinner times">
+                <ul
+                  className="mt-4 flex list-none flex-wrap gap-2"
+                  aria-label="Available dinner times"
+                >
                   {selected.times.map((time) => (
-                    <li key={time}>{formatDinnerTime(time)}</li>
+                    <li
+                      className="rounded-sm border bg-card px-2.5 py-1.5 text-[13px] tabular-nums"
+                      key={time}
+                    >
+                      {formatDinnerTime(time)}
+                    </li>
                   ))}
                 </ul>
               </>
             ) : (
-              <p>{statusLabel[selectedStatus]}</p>
+              <p className="mt-1.5 text-[13px] text-muted-foreground">
+                {statusLabel[selectedStatus]}
+              </p>
             )}
           </section>
         </div>

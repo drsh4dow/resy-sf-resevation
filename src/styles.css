@@ -6,546 +6,95 @@
   --background: #fafafa;
   --foreground: #171717;
   --card: #ffffff;
-  --muted: #f3f3f3;
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--foreground);
+  --primary-foreground: var(--card);
+  --secondary: #f3f3f3;
+  --secondary-foreground: var(--foreground);
+  --muted: #f6f6f6;
   --muted-foreground: #626262;
+  --accent: #f8f9fb;
+  --accent-foreground: var(--foreground);
+  --destructive: #b91c1c;
+  --destructive-foreground: var(--card);
   --border: #e5e5e5;
+  --input: #8a8a8a;
   --ring: #0070f3;
-  --warn: #92400e;
-  --warn-surface: #fff8ed;
+  --link: #005ac4;
+  --available: #0070f3;
+  --track: #e8e8e8;
+  --warning: #fff8ed;
+  --warning-foreground: #92400e;
+  --warning-emphasis: #713c0d;
+  --warning-border: #b88753;
 }
 
 @theme inline {
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius-lg: 0.625rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-available: var(--available);
+  --color-track: var(--track);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-emphasis: var(--warning-emphasis);
+  --color-warning-border: var(--warning-border);
 }
+
+/* Preserve the UI's inclusive breakpoints, including at exactly 640px and 960px. */
+@custom-variant tablet (@media (max-width: 960px));
+@custom-variant mobile (@media (max-width: 640px));
 
 @layer base {
   * {
-    border-color: var(--border);
+    @apply border-border;
   }
+
   body {
-    margin: 0;
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
   }
-  button,
-  input,
-  summary {
-    font: inherit;
-  }
+
   button,
   summary {
-    cursor: pointer;
+    @apply cursor-pointer;
   }
-  button {
-    color: inherit;
-  }
+
   a {
-    text-underline-offset: 3px;
+    @apply underline-offset-3;
   }
+
   :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 4px;
+    @apply outline-2 outline-offset-4 outline-ring;
   }
 }
 
-.ranking-page {
-  max-width: 1160px;
-  margin: 0 auto;
-  padding: 56px 32px 80px;
-}
-.eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  font-weight: 650;
-  color: var(--muted-foreground);
-}
-.ranking-header h1 {
-  margin: 14px 0 12px;
-  font-size: clamp(30px, 4vw, 44px);
-  font-weight: 620;
-  line-height: 1.1;
-  letter-spacing: -0.045em;
-}
-.scope {
-  font-size: 14px;
-  color: var(--muted-foreground);
-}
-.scope span {
-  padding: 0 7px;
-}
-.snapshot-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-top: 18px;
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.method {
-  margin: 18px 0 34px;
-  font-size: 13px;
-}
-.method summary {
-  width: fit-content;
-  color: var(--muted-foreground);
-}
-.method > div {
-  max-width: 760px;
-  padding: 8px 0 2px;
-  color: var(--muted-foreground);
-  line-height: 1.7;
-}
-.method p + p {
-  margin-top: 10px;
-}
-.method strong {
-  font-weight: 600;
-  color: var(--foreground);
-}
-.table-tools {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-.status-filters {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.status-filters button {
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 13px;
-  color: var(--muted-foreground);
-}
-.status-filters button:hover {
-  background: var(--muted);
-}
-.status-filters button[aria-pressed="true"] {
-  background: var(--foreground);
-  color: white;
-}
-.status-filters button span {
-  margin-left: 5px;
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-}
-.restaurant-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 240px;
-  border: 1px solid #8a8a8a;
-  padding: 8px 10px;
-  border-radius: 6px;
-  background: var(--card);
-  color: var(--muted-foreground);
-}
-.restaurant-search:focus-within {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-.restaurant-search input {
-  min-width: 0;
-  width: 100%;
-  font-size: 13px;
-  outline: none;
-  color: var(--foreground);
-  background: transparent;
-}
-.restaurant-search input::placeholder {
-  color: var(--muted-foreground);
-}
-.group-note {
-  margin: 0 0 14px;
-  max-width: 780px;
-  font-size: 13px;
-  color: var(--muted-foreground);
-  line-height: 1.6;
-}
-.ranking-table-wrap {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--card);
-  overflow: hidden;
-}
-.ranking-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 14px;
-}
-.ranking-table th {
-  padding: 14px 18px;
-  background: #f6f6f6;
-  color: var(--muted-foreground);
-  font-size: 11px;
-  font-weight: 550;
-  white-space: nowrap;
-}
-.ranking-table th svg {
-  display: inline;
-  vertical-align: -2px;
-}
-.ranking-table th:first-child {
-  width: 60%;
-}
-.ranking-table td {
-  padding: 17px 18px;
-  border-top: 1px solid var(--border);
-  vertical-align: middle;
-}
-.ranking-table tbody > tr:not(.detail-row):hover {
-  background: #fcfcfc;
-}
-.ranking-table .expanded-row {
-  background: #f8f9fb;
-}
-.restaurant-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-  line-height: 1.4;
-  font-weight: 560;
-}
-.restaurant-name:hover {
-  color: #005ac4;
-}
-.restaurant-name svg {
-  flex-shrink: 0;
-  color: var(--muted-foreground);
-}
-.chevron-open {
-  transform: rotate(90deg);
-}
-.row-reason {
-  margin: 5px 0 0 23px;
-  color: var(--muted-foreground);
-  font-size: 11px;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.score-cell {
-  width: 124px;
-}
-.score-number {
-  font-size: 22px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-}
-.score-track {
-  height: 3px;
-  width: 70px;
-  margin-top: 8px;
-  background: #e8e8e8;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.score-track > span {
-  display: block;
-  height: 100%;
-  background: var(--foreground);
-}
-.unscored,
-.muted {
-  color: var(--muted-foreground);
-}
-.week-strip {
-  display: grid;
-  grid-template-columns: repeat(7, 14px);
-  gap: 4px;
-}
-.day-mark {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  border: 1px solid #8a8a8a;
-  background: #f2f2f2;
-  position: relative;
-}
-.day-mark[data-status="available"] {
-  background: #fff;
-}
-.day-mark[data-status="available"]::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border-radius: 100%;
-  background: var(--ring);
-}
-.day-mark[data-status="unavailable"] {
-  background: var(--foreground);
-  border-color: var(--foreground);
-}
-.day-mark[data-status="non_service"] {
-  background: repeating-linear-gradient(135deg, #bbb 0 1px, #f5f5f5 1px 4px);
-}
-.day-mark[data-status="unknown"],
-.day-mark[data-status="collection_error"],
-.day-mark[data-status="missing"],
-.day-mark[data-status="unreleased"] {
-  background: var(--warn-surface);
-  border-color: #b88753;
-}
-.day-mark[data-status="unknown"]::after,
-.day-mark[data-status="collection_error"]::after,
-.day-mark[data-status="missing"]::after,
-.day-mark[data-status="unreleased"]::after {
-  content: "?";
-  position: absolute;
-  inset: 0;
-  text-align: center;
-  color: var(--warn);
-  font-size: 10px;
-  line-height: 12px;
-}
-.table-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 14px 0;
-  font-size: 11px;
-  color: var(--muted-foreground);
-}
-.empty-table {
-  text-align: center;
-  color: var(--muted-foreground);
-  height: 130px;
-}
-.ranking-table .detail-row > td {
-  padding: 24px 28px 28px;
-  background: #f8f9fb;
-}
-.detail-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.detail-heading a {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  color: #005ac4;
-}
-.detail-heading a:hover {
-  text-decoration: underline;
-}
-.review-reason {
-  margin-top: 14px;
-  padding: 10px 12px;
-  border-left: 2px solid #b88753;
-  background: var(--warn-surface);
-  color: #713c0d;
-  font-size: 13px;
-  line-height: 1.6;
-}
-.detail-grid {
-  display: grid;
-  grid-template-columns: minmax(250px, 360px) minmax(0, 1fr);
-  gap: 44px;
-  margin-top: 24px;
-}
-.calendar-heading {
-  margin-bottom: 16px;
-  font-size: 13px;
-  font-weight: 550;
-}
-.dinner-calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-}
-.weekday-label {
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted-foreground);
-  padding-bottom: 2px;
-}
-.dinner-calendar button {
-  min-height: 35px;
-  border-radius: 4px;
-  border: 1px solid #8a8a8a;
-  background: white;
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-.dinner-calendar button[data-status="available"] {
-  border-bottom: 3px solid #0070f3;
-}
-.dinner-calendar button[data-status="unavailable"] {
-  background: var(--foreground);
-  border-color: var(--foreground);
-  color: white;
-}
-.dinner-calendar button[data-status="non_service"] {
-  background: repeating-linear-gradient(135deg, #e3e3e3 0 2px, #f5f5f5 2px 6px);
-}
-.dinner-calendar button[data-status="unknown"],
-.dinner-calendar button[data-status="missing"],
-.dinner-calendar button[data-status="collection_error"],
-.dinner-calendar button[data-status="unreleased"] {
-  background: var(--warn-surface);
-  color: var(--warn);
-  border-style: dashed;
-  border-color: #b88753;
-}
-.dinner-calendar button[aria-pressed="true"] {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-.calendar-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  margin-top: 15px;
-  padding: 0;
-  list-style: none;
-  font-size: 11px;
-  color: var(--muted-foreground);
-}
-.calendar-legend li {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.date-availability h2 {
-  font-size: 15px;
-  font-weight: 600;
-}
-.date-availability > p {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--muted-foreground);
-}
-.dinner-times {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
-  list-style: none;
-}
-.dinner-times li {
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--card);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-.retry-button {
-  display: block;
-  margin-top: 20px;
-  padding: 9px 14px;
-  background: var(--foreground);
-  color: white;
-  border-radius: 6px;
+/* Decorative hatching has no semantic palette role of its own. Keep its two
+   densities here rather than introducing tokens for individual stripe colors. */
+@utility bg-non-service {
+  background-image: repeating-linear-gradient(135deg, #e3e3e3 0 2px, #f5f5f5 2px 6px);
 }
 
-@media (max-width: 960px) {
-  .ranking-table .week-column {
-    display: none;
-  }
-  .detail-grid {
-    gap: 28px;
-  }
-}
-
-@media (max-width: 640px) {
-  .ranking-page {
-    padding: 30px 16px 48px;
-  }
-  .scope {
-    line-height: 1.8;
-    font-size: 12px;
-  }
-  .scope span {
-    padding: 0 3px;
-  }
-  .snapshot-line {
-    gap: 6px;
-    flex-direction: column;
-  }
-  .method {
-    margin-bottom: 26px;
-  }
-  .table-tools {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .status-filters {
-    justify-content: space-between;
-    gap: 0;
-  }
-  .status-filters button {
-    padding: 8px 10px;
-    font-size: 12px;
-  }
-  .restaurant-search {
-    width: 100%;
-  }
-  .ranking-table th {
-    padding: 12px 9px;
-    font-size: 10px;
-  }
-  .ranking-table td {
-    padding: 16px 9px;
-  }
-  .ranking-table th:first-child {
-    width: 75%;
-  }
-  .restaurant-name {
-    font-size: 12px;
-    gap: 5px;
-  }
-  .restaurant-name svg {
-    width: 12px;
-  }
-  .score-cell {
-    width: 70px;
-  }
-  .score-number {
-    font-size: 20px;
-  }
-  .score-track {
-    width: 42px;
-  }
-  .row-reason {
-    margin-left: 17px;
-    font-size: 10px;
-  }
-  .ranking-table .detail-row > td {
-    padding: 18px 12px;
-  }
-  .detail-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .table-footer {
-    flex-direction: column;
-    font-size: 10px;
-    line-height: 1.7;
-  }
+@utility bg-non-service-mark {
+  background-image: repeating-linear-gradient(135deg, #bbb 0 1px, #f5f5f5 1px 4px);
 }
